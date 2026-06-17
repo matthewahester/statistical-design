@@ -1,0 +1,22 @@
+---
+title: "Resources"
+subtitle: "A glossary, a study-design reference, and a causal-diagram guide"
+page-type: orientation
+toc: true
+---
+
+These are the reference pages to keep open while you read the notes and work the labs — the design vocabulary,
+the families of study designs, and how to draw and read a causal diagram, all in one place.
+
+- **[Design & causal-evidence glossary](design-glossary.qmd)** — the vocabulary used throughout the course,
+  from the unit of analysis and the random-sampling-vs-random-assignment distinction to confounders, blocking,
+  main effects and interactions, sampling frames, the design effect, and the MCAR/MAR/MNAR missing-data
+  mechanisms, with a plain-language meaning for each.
+- **[Study-design reference](design-reference.qmd)** — a one-page summary that lays the design families
+  (completely randomized, blocked, paired, factorial, observational, and survey sampling) side by side: what
+  each controls, what claim it can support, and what threat it leaves open.
+- **[Causal-diagram guide](causal-diagram-guide.qmd)** — how to draw and read a causal diagram: nodes and
+  arrows, confounders, mediators, colliders, backdoor paths, adjustment sets, and bad controls.
+
+These pages are orientation and study aids. For graded specifics — deadlines, submissions, and the operational
+details of the course — more lives in **Blackboard (the LMS)**, which is authoritative.

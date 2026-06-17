@@ -1,0 +1,52 @@
+---
+title: "Labs"
+subtitle: "The hands-on strand (R + Quarto), in support of design reasoning"
+page-type: orientation
+toc: true
+---
+
+The labs are the course's hands-on strand. They run alongside the notes, not instead of them: where the notes
+develop a design idea and interpret it, a lab lets you *do* it — build the randomization reference
+distribution, watch blocking sharpen a comparison, simulate confounding and adjustment, and compare sampling
+designs. Computation is in service of the design, not the other way around — software output does not rescue a
+weak design. There are four labs across the term, each tied to a specific week.
+
+## How a lab works
+
+Every lab is built the same way, so you always know where you are:
+
+1. **Goal.** What the design task is meant to show, stated in one or two sentences and linked back to the
+   companion week.
+2. **Setup.** The small bit of preparation you need — the random seed, the study, and the design question.
+3. **Steps.** The activity itself, broken into numbered steps with shown R code. You read the code, understand
+   each piece, then run it yourself.
+4. **Verify.** A check that the simulated result matches the design logic and the interpretation from the notes
+   — the moment where computation and reasoning meet.
+5. **AI Use Note.** A short record of any AI help, with three parts — Tool, Purpose, and Verification — where
+   verification (how you checked the output yourself) is the load-bearing field.
+
+A note on the code: in these labs the R chunks are **shown for study**, written with a fixed seed
+(`set.seed(45403)`) so they are reproducible. They are not executed on this site — you run them in your own R
+session.
+
+## The labs
+
+The four labs accompany the simulation-friendly design weeks, two on experiments and two on observational and
+survey designs:
+
+- **Lab 5 — Randomization & the reference distribution.** Shuffling treatment labels to *build* the
+  distribution a randomization p-value reads from. (Accompanies Week 5.)
+- **Lab 6 — Blocking vs complete randomization.** Watching the standard error shrink when you block, with the
+  effect held fixed. (Accompanies Week 6.)
+- **Lab 10 — Confounding & adjustment by simulation.** Generating data from a causal diagram to see how
+  adjustment recovers an effect — and how a bad control breaks it. (Accompanies Week 10.)
+- **Lab 12 — Sampling designs by simulation.** Comparing simple random, stratified, and cluster sampling and
+  reading the design effect. (Accompanies Week 12.)
+
+Factorial experiments and interactions (Weeks 7–8), missing data (Week 13), and study critique (Week 14) get a
+full hands-on treatment inside the notes themselves, with the same shown-code style.
+
+## Public vs. graded
+
+The labs here are public study material; the graded deliverable, its rubric, and due date live in **Blackboard
+(the LMS)** — this page is study and practice only.

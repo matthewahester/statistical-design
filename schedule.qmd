@@ -1,0 +1,75 @@
+---
+title: "Schedule (topic flow)"
+subtitle: "A 15-week pacing plan — Blackboard is authoritative for dates and deadlines"
+toc: true
+---
+
+::: {.callout-important}
+This is a **pacing plan, not a calendar**. It shows the order in which design topics unfold and roughly when,
+so you can read ahead and see where you are headed. It is **not** the authoritative calendar: exact dates,
+deadlines, and any mid-term adjustments live in **Blackboard (the LMS)**, which is authoritative. A few fixed
+semester dates are noted for orientation only — confirm everything against Blackboard.
+:::
+
+The course runs fifteen weeks in four parts. Each part below lists its weeks, the theme for each week, and the
+throughline — the design question that carries the week. The **theme** links to that week's note.
+
+## Part I — Questions, measurement & validity (Weeks 1–4)
+
+We set up the frame: what a statistical question is, how we measure, the signature distinction between sampling
+and assignment, and the threats a claim must survive.
+
+| Week | Theme | The throughline |
+|------|-------|-----------------|
+| 1 | [Statistical questions & units of analysis](notes/week-01-statistical-questions-and-units-of-analysis.qmd) | What is the question, what is the unit, and what claim is being made? |
+| 2 | [Measurement & operational definitions](notes/week-02-measurement-variables-and-operational-definitions.qmd) | How do we turn an idea into observable data without pretending measurement is automatic? |
+| 3 | [Random sampling vs random assignment](notes/week-03-random-sampling-vs-random-assignment.qmd) | Which mechanism is present, and does it earn a population claim or a causal one? |
+| 4 | [Bias, confounding & validity](notes/week-04-bias-confounding-and-validity.qmd) | What threatens a claim — and is the design internally or externally valid? |
+
+*Note: **Labor Day (Mon, Sep 7)** falls in Week 3 — no class that Monday, so the week runs Wednesday and
+Friday.*
+
+## Part II — Designed experiments (Weeks 5–8)
+
+We build the experimental machinery: randomized comparisons, then the refinements that sharpen and structure
+them.
+
+| Week | Theme | The throughline |
+|------|-------|-----------------|
+| 5 | [Completely randomized experiments](notes/week-05-completely-randomized-experiments.qmd) | Why does random assignment license a causal claim, and how do we read the comparison? |
+| 6 | [Blocking & paired designs](notes/week-06-blocking-and-paired-designs.qmd) | How do we sharpen the *same* effect by removing nuisance variation? |
+| 7 | [Factorial experiments (midterm)](notes/week-07-factorial-experiments-and-midterm.qmd) | How do two factors at once give us main effects efficiently? |
+| 8 | [Interactions in designed studies](notes/week-08-interactions-in-designed-studies.qmd) | When does the effect of one factor depend on another? |
+
+*Note: the **midterm is Friday, Oct 9** (in class), during Week 7. It covers statistical questions through
+factorial designs. No graded content appears on this public site — see Blackboard.*
+
+## Part III — Observational & causal evidence (Weeks 9–10)
+
+We move to studies without random assignment, where confounding lurks and causal diagrams keep the reasoning
+honest.
+
+| Week | Theme | The throughline |
+|------|-------|-----------------|
+| 9 | [Observational studies](notes/week-09-observational-studies.qmd) | When there's no assignment, when can adjustment turn association toward causation? |
+| 10 | [Causal diagrams & backdoor reasoning](notes/week-10-causal-diagrams-and-backdoor-reasoning.qmd) | What should we adjust for — and what is a "bad control"? |
+
+## Part IV — Surveys, sampling & synthesis (Weeks 11–15)
+
+We add survey sampling and missing data, then critique and synthesize the whole arc.
+
+| Week | Theme | The throughline |
+|------|-------|-----------------|
+| 11 | [Surveys & sampling frames](notes/week-11-surveys-and-sampling-frames.qmd) | What does the sampling frame, coverage, and nonresponse let a survey claim? |
+| 12 | [Stratified & cluster sampling](notes/week-12-stratified-and-cluster-sampling.qmd) | How do sampling designs change the precision of a population estimate? |
+| 13 | [Missing data & nonresponse](notes/week-13-missing-data-and-nonresponse.qmd) | How sensitive is a conclusion to who is missing, and why? |
+| 14 | [Study critique & design-memo workshop](notes/week-14-study-critique-and-design-memo-workshop.qmd) | How do you critique a claim and write a memo bounded by what the design supports? |
+| 15 | [Final design memo & review](notes/week-15-final-design-memo-and-review.qmd) | How do experiments, observational studies, and surveys fit as one practice of evidence? |
+
+*Note: **fall break is Nov 22–28** (no classes), between Weeks 13 and 14. The **last class is Mon, Dec 7**, the
+**consultation day is Dec 8**, and the **final-exam window is Dec 9–15** (exact block via Blackboard).*
+
+::: {.callout-note}
+Again: this page is a pacing plan to help you read ahead. For the real calendar — every date, every deadline,
+and any adjustment during the term — **Blackboard (the LMS) is authoritative**.
+:::

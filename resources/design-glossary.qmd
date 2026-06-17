@@ -1,0 +1,104 @@
+---
+title: "Design & causal-evidence glossary"
+subtitle: "The vocabulary used across the course"
+page-type: reference
+toc: true
+---
+
+Keep this page open while you read the notes. The single most important distinction in the course runs down the
+first two tables: **random sampling** earns *population* claims, **random assignment** earns *causal* claims,
+and they are not interchangeable. The second discipline is **association vs causation** — what a design lets you
+say, and what it does not. All numeric values mentioned come from the synthetic recurring studies and are
+`verified: false` (the statistics gate is blocked pending sign-off).
+
+## Questions, units, and populations
+
+| Term | Meaning |
+|---|---|
+| statistical question | a question about a population/process, naming a comparison and a target claim |
+| unit of analysis | the entity a row of data describes and that the design samples or assigns (a student, a classroom, a dorm floor) — analyze at the design's grain, never finer |
+| population / process | the larger thing the claim is about; you rarely observe all of it |
+| sampling frame | the operational list you can actually sample from; **frame ≠ population** is *coverage error* |
+| sample | the units you actually observed |
+| parameter / estimand | the fixed target you want to learn about (a population proportion, a causal effect) |
+| estimate | the one realized number your data produce (e.g. $\hat p = 0.45$, $d = 3.0$) |
+
+## The two random mechanisms (keep these apart)
+
+| Term | Meaning |
+|---|---|
+| **random sampling** | the mechanism that selects units **into the sample** — earns **population** claims (generalization) |
+| **random assignment** | the mechanism that allocates **treatment to units** — earns **causal** claims (internal validity) |
+| | a study can have one, both, or neither; they are independent design choices |
+
+## Experiments
+
+| Term | Meaning |
+|---|---|
+| treatment / control | the conditions compared; the comparison group is the counterfactual stand-in |
+| experimental unit | the unit actually assigned to a condition |
+| completely randomized design (CRD) | units assigned to conditions purely at random |
+| randomized complete block design (RCBD) | randomize *within* blocks of similar units; **blocking** removes a pre-treatment nuisance source of variation |
+| paired / matched design | compare within pairs (or within the same unit) to remove between-unit variation |
+| factor / level | a manipulated variable and its settings (workshop: no/yes) |
+| main effect | a factor's average effect across the other factor's levels |
+| interaction | when one factor's effect **depends on** the level of another (read the cells) |
+| difference in means $d$ | the observed effect, $\bar y_T - \bar y_C$ |
+| $\operatorname{SE}(d)$ | the standard error of the difference, $s_p\sqrt{1/n_T + 1/n_C}$ |
+| randomization (reference) distribution | the distribution of the effect built by shuffling treatment labels under the null of no effect; the randomization p-value is its tail |
+
+## Observational & causal evidence
+
+| Term | Meaning |
+|---|---|
+| observational study | treatment is **not** assigned; groups may differ at baseline |
+| association vs causation | observed difference vs the effect of the treatment itself |
+| confounder | a **pre-treatment** common cause of treatment and outcome (opens a *backdoor path*) — adjust for it |
+| covariate | a pre-treatment variable; adjust only those that close a backdoor |
+| mediator | a variable on the causal path $Z \to M \to Y$ (**post-treatment**) — do **not** adjust for the total effect |
+| collider | a common *effect* of two variables — adjusting for it **opens** a path |
+| bad control | adjusting for a mediator or a collider (it biases the estimate) |
+| adjustment / stratification | comparing within levels of a confounder (or via regression) to close a backdoor |
+| potential outcomes $Y(1), Y(0)$ | the outcomes a unit would have under treatment vs control; the causal effect is their contrast |
+| internal validity | does the design support the causal claim **here**? |
+| external validity | does the result generalize **there**, beyond the studied units? |
+
+## Surveys & sampling
+
+| Term | Meaning |
+|---|---|
+| simple random sampling (SRS) | every unit equally likely; the baseline sampling design |
+| stratified sampling | sample within strata; lowers variance when strata differ (**design effect < 1**) |
+| cluster sampling | sample whole groups; cheaper but higher variance (**design effect > 1**) |
+| multistage sampling | sample clusters, then units within them |
+| design effect ($\text{deff}$) | the variance multiplier vs SRS; for equal clusters $\text{deff} = 1 + (m-1)\rho$ |
+| intra-cluster correlation $\rho$ | how alike units within a cluster are |
+| coverage error | the frame omits part of the population |
+| nonresponse | sampled units that do not respond; nonresponse **bias** if responders differ from nonresponders |
+
+## Missing data
+
+| Term | Meaning |
+|---|---|
+| unit nonresponse | a whole unit is missing (didn't respond) |
+| item missingness | a unit is present but an item is blank |
+| attrition | units lost over time (e.g. before a post-test) |
+| MCAR | missing completely at random (missingness unrelated to anything) |
+| MAR | missing at random given the observed data |
+| MNAR | missing not at random (missingness depends on the unmeasured value) — the dangerous case |
+| sensitivity analysis | bounding a conclusion under the worst plausible missingness |
+
+## Threats to validity (a checklist)
+
+| Threat | What it is |
+|---|---|
+| selection bias | the groups (or sample) differ in who is in them |
+| measurement bias | the measure systematically mis-records the construct |
+| confounding | a pre-treatment common cause distorts the comparison |
+| attrition / nonresponse | who is missing differs from who remains |
+| post-treatment adjustment | adjusting for a mediator/collider (a bad control) |
+
+---
+
+*This page is a study reference. For graded specifics — deadlines, submissions, and policies — **Blackboard
+(the LMS) is authoritative**.*

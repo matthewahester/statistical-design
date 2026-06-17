@@ -1,0 +1,139 @@
+# Design, Experiments, and Causal Evidence — public Quarto course site (assembled course materials).
+# Sibling of matthewhester.com; intended to live at /statistical-design/ under that domain.
+# Layout/theme aligned to the matthewhester.com course family (cosmo + styles.css, dark navbar,
+# floating sidebar, right-side TOC, MathML math). site-url set for the combined deploy; this repo
+# does not self-deploy (no CI here — the hub workflow assembles the courses).
+# Boundary: this is the PUBLIC surface. Private build state (_state/), source
+# governance (source_text/), assessment shadows (assessment_shadow/), run reports
+# (run_reports/), and accessibility evidence (accessibility/) are NOT rendered.
+project:
+  type: website
+  output-dir: _site
+  # RENDER ALLOW-LIST (docs/08 §2 boundary hazard; docs/26 §6). Fails safe — only the
+  # public sections below render into _site/. Every private dir (_state/ underscore-skipped,
+  # plus source_text/, assessment_shadow/, run_reports/, accessibility/) is excluded.
+  # NOTE: a bare "*.qmd" matches RECURSIVELY in Quarto 1.8.26 and could leak nested private .qmd.
+  # List the three public root pages explicitly instead, and negate private dirs as
+  # belt-and-suspenders (docs/08 §2, docs/26 §6).
+  render:
+    - index.qmd
+    - syllabus.qmd
+    - schedule.qmd
+    - notes/*.qmd
+    - labs/*.qmd
+    - resources/*.qmd
+    - "!source_text/"
+    - "!assessment_shadow/"
+    - "!run_reports/"
+    - "!accessibility/"
+
+website:
+  title: "Design, Experiments & Causal Evidence"
+  site-url: https://matthewhester.com/statistical-design/
+  description: |
+    Public-facing course materials for Design, Experiments & Causal Evidence —
+    an assembled course site (notes, labs, and resources) on study design and
+    causal reasoning, curated by Matt Hester.
+  open-graph: true
+  navbar:
+    pinned: true
+    background: dark            # black top bar — the family signature
+    logo: assets/icon.png
+    logo-alt: "Design, Experiments & Causal Evidence — a desert-rose course mark"
+    left:
+      - href: index.qmd
+        text: Home
+      - href: syllabus.qmd
+        text: Syllabus
+      - href: schedule.qmd
+        text: Schedule
+  sidebar:
+    style: floating
+    collapse-level: 2
+    contents:
+      - section: "Notes"
+        href: notes/index.qmd
+        contents:
+          - href: notes/index.qmd
+            text: "Notes overview"
+          - section: "Part I — Questions, measurement & validity (Wk 1–4)"
+            contents:
+              - href: notes/week-01-statistical-questions-and-units-of-analysis.qmd
+                text: "1 — Statistical questions & units of analysis"
+              - href: notes/week-02-measurement-variables-and-operational-definitions.qmd
+                text: "2 — Measurement & operational definitions"
+              - href: notes/week-03-random-sampling-vs-random-assignment.qmd
+                text: "3 — Random sampling vs random assignment"
+              - href: notes/week-04-bias-confounding-and-validity.qmd
+                text: "4 — Bias, confounding & validity"
+          - section: "Part II — Designed experiments (Wk 5–8)"
+            contents:
+              - href: notes/week-05-completely-randomized-experiments.qmd
+                text: "5 — Completely randomized experiments"
+              - href: notes/week-06-blocking-and-paired-designs.qmd
+                text: "6 — Blocking & paired designs"
+              - href: notes/week-07-factorial-experiments-and-midterm.qmd
+                text: "7 — Factorial experiments (midterm)"
+              - href: notes/week-08-interactions-in-designed-studies.qmd
+                text: "8 — Interactions in designed studies"
+          - section: "Part III — Observational & causal evidence (Wk 9–10)"
+            contents:
+              - href: notes/week-09-observational-studies.qmd
+                text: "9 — Observational studies"
+              - href: notes/week-10-causal-diagrams-and-backdoor-reasoning.qmd
+                text: "10 — Causal diagrams & backdoor reasoning"
+          - section: "Part IV — Surveys, sampling & synthesis (Wk 11–15)"
+            contents:
+              - href: notes/week-11-surveys-and-sampling-frames.qmd
+                text: "11 — Surveys & sampling frames"
+              - href: notes/week-12-stratified-and-cluster-sampling.qmd
+                text: "12 — Stratified & cluster sampling"
+              - href: notes/week-13-missing-data-and-nonresponse.qmd
+                text: "13 — Missing data & nonresponse"
+              - href: notes/week-14-study-critique-and-design-memo-workshop.qmd
+                text: "14 — Study critique & design-memo workshop"
+              - href: notes/week-15-final-design-memo-and-review.qmd
+                text: "15 — Final design memo & review"
+      - section: "Labs"
+        href: labs/index.qmd
+        contents:
+          - href: labs/index.qmd
+            text: "Labs overview"
+          - href: labs/lab-05-randomization-and-the-reference-distribution.qmd
+            text: "Lab 5 — Randomization & the reference distribution"
+          - href: labs/lab-06-blocking-versus-complete-randomization.qmd
+            text: "Lab 6 — Blocking vs complete randomization"
+          - href: labs/lab-10-confounding-and-adjustment-by-simulation.qmd
+            text: "Lab 10 — Confounding & adjustment by simulation"
+          - href: labs/lab-12-sampling-designs-by-simulation.qmd
+            text: "Lab 12 — Sampling designs by simulation"
+      - section: "Resources"
+        href: resources/index.qmd
+        contents:
+          - href: resources/index.qmd
+            text: "Resources overview"
+          - href: resources/design-glossary.qmd
+            text: "Design & causal-evidence glossary"
+          - href: resources/design-reference.qmd
+            text: "Study-design reference"
+          - href: resources/causal-diagram-guide.qmd
+            text: "Causal-diagram guide"
+  page-footer:
+    left: "© 2026 Matt Hester · Design, Experiments & Causal Evidence"
+    center: "[Matt Hester · matthewhester.com](https://matthewhester.com/)"
+    right: "Built with [Quarto](https://quarto.org)"
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    toc-location: right
+    anchor-sections: true
+    smooth-scroll: true
+    link-external-newwindow: true
+    fontsize: 1.05em
+    mainfont: "Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
+    monofont: "JetBrains Mono, Consolas, Menlo, monospace"
+# Math renders as MathML/MathJax (accessible text), never as images (docs/05 P7; docs/08 §4).
+# R is shown as static, non-executed ```r fences in this diagnostic, so render is deterministic and R-free.

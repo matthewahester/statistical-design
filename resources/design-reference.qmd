@@ -1,0 +1,69 @@
+---
+title: "Study-design reference"
+subtitle: "The design families side by side — what each controls, claims, and leaves open"
+page-type: reference
+toc: true
+---
+
+This one-page reference lays the course's design families next to each other. The questions to ask of any study
+are always the same: *what is the unit of analysis? was there random sampling? was there random assignment?
+what claim does that license? what threat is left open?* All example numbers come from the synthetic recurring
+studies and are `verified: false` (statistics gate blocked).
+
+## The design families at a glance
+
+| Design | Random assignment? | Random sampling? | Strongest claim it supports | Main threat it leaves open |
+|---|---|---|---|---|
+| Completely randomized experiment | yes | usually no | a **causal** effect for units like these | external validity (generalization) |
+| Randomized block / paired design | yes (within blocks/pairs) | usually no | a **causal** effect, **more precisely** estimated | external validity; blocking on the wrong variable |
+| Factorial experiment | yes | usually no | **causal** main effects **and interactions** | reading a main effect when an interaction is large |
+| Observational study (with adjustment) | no | varies | an **adjusted association**, causal only under the measured-confounder assumption | unmeasured confounding; bad controls |
+| Survey (SRS / stratified / cluster) | no | yes | a **population** estimate (with uncertainty) | coverage error; nonresponse bias |
+
+The throughline: **assignment buys causation; sampling buys generalization.** No single design buys both for
+free, which is why real evidence is usually assembled from several.
+
+## Experiments: sharpening and structuring the comparison
+
+| Design | What it does | Effect on the estimate | Worked anchor (synthetic) |
+|---|---|---|---|
+| Completely randomized (CRD) | assign at random; compare group means | the baseline | Focus experiment: $d = 3.0$, $\operatorname{SE} \approx 1.55$, randomization $p \approx 0.06$ |
+| Blocking (RCBD) | randomize within pre-treatment blocks | **same effect, smaller SE** | $\operatorname{SE} \approx 1.03$, $p \approx 0.005$ |
+| Pairing / matching | compare within pairs / within unit | **same effect, smaller SE** | paired $\operatorname{SE} \approx 0.91$, $p \approx 0.003$ |
+| Factorial (2×2) | two factors at once | main effects **and** interaction | cells $5, 8, 7, 13$; $A = +4.5$, $B = +3.5$, $AB = +1.5$ |
+
+Blocking and pairing change the **standard error**, not the effect: in the Focus experiment the effect stays
+$d = 3.0$ while the SE falls from $1.55$ (CRD) to $1.03$ (blocked) to $0.91$ (paired).
+
+## Observational evidence: adjustment and its limits
+
+When there is no random assignment, groups differ at baseline. **Adjustment** (stratification or regression)
+compares within levels of a measured confounder to close a *backdoor path*. In the tutoring-center study the
+naive user-vs-nonuser difference is $+8.0$; adjusting for prior ability shrinks it to $+3.0$. Adjustment is only
+as good as the confounders you measured — adjust for **pre-treatment** confounders, never for a **post-
+treatment** mediator or collider (a *bad control*). See the [causal-diagram guide](causal-diagram-guide.qmd).
+
+## Survey sampling: precision by design
+
+| Sampling design | Cost | Variance vs SRS | Worked anchor (synthetic) |
+|---|---|---|---|
+| Simple random (SRS) | baseline | baseline | $\hat p = 0.45$, $\operatorname{SE} \approx 0.026$ |
+| Stratified | similar | **lower** (deff < 1) when strata differ | deff $\approx 0.72$, $\operatorname{SE} \approx 0.022$ |
+| Cluster | cheaper | **higher** (deff > 1) | deff $\approx 2.4$, $\operatorname{SE} \approx 0.041$ |
+
+A cluster sample must **not** be analyzed as if it were an SRS — that ignores the design effect and understates
+the uncertainty. And no amount of sampling precision fixes **nonresponse**: in the study-habits survey the
+sampling CI is $(0.40, 0.50)$, but the nonresponse sensitivity bound is $[0.27, 0.67]$ — far wider.
+
+## The questions to ask of any study
+
+1. **What is the question, and the unit of analysis?**
+2. **Was there random sampling?** (If so, you can generalize to the frame's population.)
+3. **Was there random assignment?** (If so, you can make a causal claim for units like these.)
+4. **What are the threats?** (Selection, measurement, confounding, attrition, nonresponse, bad controls.)
+5. **What can the design support — and what would strengthen it?** (This is the design memo.)
+
+---
+
+*This page is a study reference. For graded specifics — deadlines, submissions, and policies — **Blackboard
+(the LMS) is authoritative**.*

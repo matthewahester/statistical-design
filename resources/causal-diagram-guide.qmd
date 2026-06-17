@@ -1,0 +1,83 @@
+---
+title: "Causal-diagram guide"
+subtitle: "How to draw and read a causal diagram — confounders, colliders, backdoor paths, and bad controls"
+page-type: reference
+toc: true
+---
+
+A causal diagram (a *directed acyclic graph*, or DAG) is a picture of your **assumptions** about what causes
+what. It is not a result and not a conclusion — it is the reasoning tool that tells you **what to adjust for**
+and, just as importantly, **what not to adjust for**. This guide is a first-course, applied treatment: the goal
+is to reason clearly, not to prove identification theorems. (For a deeper, optional treatment, see *Causal
+Inference: What If* by Hernán & Robins, freely readable online — linked here, not reproduced.)
+
+## The pieces
+
+| Piece | Picture | Meaning |
+|---|---|---|
+| node | a labelled point | a variable (treatment, outcome, or another factor) |
+| directed edge | an arrow $A \to B$ | "$A$ is a direct cause of $B$" (your assumption) |
+| path | a chain of edges | any route between two nodes, following or against arrows |
+| causal path | arrows aligned $Z \to \dots \to Y$ | how the treatment actually affects the outcome |
+| backdoor path | a non-causal route from $Z$ to $Y$ that starts with an arrow **into** $Z$ | a source of confounding you must block |
+
+## The three roles a third variable can play
+
+This is the heart of the guide. The **same** variable can require opposite handling depending on its role.
+
+- **Confounder** — a common cause of both treatment and outcome: $Z \leftarrow C \to Y$. It opens a backdoor
+  path. **Adjust for it** (stratify or include it) to close the path.
+- **Mediator** — a variable on the causal path: $Z \to M \to Y$. It carries part of the effect. **Do not adjust
+  for it** if you want the *total* effect — adjusting removes the very effect you are trying to measure.
+- **Collider** — a common *effect* of two variables: $A \to K \leftarrow B$. A collider **blocks** its path by
+  default; **adjusting for it opens** a spurious association between $A$ and $B$.
+
+A **bad control** is adjusting for a mediator or a collider. It is one of the most common — and most invisible —
+ways to get a wrong causal answer, because the software runs fine and the number changes in a plausible-looking
+direction.
+
+## The backdoor rule (informally)
+
+To estimate the causal effect of $Z$ on $Y$, **block every backdoor path** by adjusting for a set of
+**pre-treatment** variables (an *adjustment set*) — and **add nothing post-treatment**. Concretely:
+
+1. List the variables you believe cause the treatment, the outcome, or both.
+2. Mark which are **pre-treatment** (measured before treatment) and which are **post-treatment**.
+3. Find the backdoor paths (routes into $Z$ that reach $Y$).
+4. Choose a set of pre-treatment variables that blocks all of them — that is your adjustment set.
+5. **Never** put a mediator or a collider in the adjustment set.
+
+## Worked example — the tutoring-center study
+
+The course's observational study asks whether **using the tutoring center** ($Z$) improves an end-of-term
+**outcome** ($Y$). Students self-select, so prior ability is in play. The assumed diagram (described in words,
+since this draft site renders diagrams as text):
+
+- **PriorAbility $\to$ Use** — more-prepared students are likelier to use the center.
+- **PriorAbility $\to$ Outcome** — more-prepared students do better anyway.
+- **Use $\to$ Outcome** — the effect we want.
+- **Use $\to$ HoursStudied $\to$ Outcome** — using the center leads to more studying, which helps.
+
+Reading it:
+
+- **PriorAbility** is a **confounder**: it sits on the backdoor path Use $\leftarrow$ PriorAbility $\to$
+  Outcome. Adjusting for it closes the backdoor — which is why the naive difference $+8.0$ falls to the adjusted
+  $+3.0$.
+- **HoursStudied** is a **mediator** (post-treatment): it is on the causal path Use $\to$ HoursStudied $\to$
+  Outcome. Adjusting for it would be a **bad control** — it would remove part of the very effect you want and
+  bias the estimate.
+
+So the adjustment set is $\{\text{PriorAbility}\}$, and **not** $\{\text{PriorAbility}, \text{HoursStudied}\}$.
+The diagram, not the regression output, is what tells you that.
+
+## What a diagram does and does not buy you
+
+- It **does** make your causal assumptions explicit and tell you what to adjust for.
+- It **does not** prove those assumptions. If a real confounder is **unmeasured**, no adjustment can close its
+  backdoor — which is the standing limit of observational evidence, and why random assignment is so valuable.
+- A diagram with an arrow you cannot justify is worse than no diagram: every edge is a claim you are making.
+
+---
+
+*This page is a study reference. For graded specifics — deadlines, submissions, and policies — **Blackboard
+(the LMS) is authoritative**.*

@@ -1,0 +1,162 @@
+---
+title: "Syllabus (public companion)"
+subtitle: "Orientation and course shape — Blackboard is authoritative for graded specifics"
+toc: true
+---
+
+::: {.callout-important}
+This public page is an **orientation companion** to the syllabus, not the operational syllabus itself. It
+describes the *shape* of the course in qualitative terms. It carries no numeric grade weights, no schedules,
+and no submission rules. For everything that counts toward your grade — exact weights, deadlines, policies,
+and submissions — **Blackboard (the LMS) is authoritative**. If this page and Blackboard ever disagree, follow
+Blackboard.
+:::
+
+## Course description
+
+This course studies **how statistical evidence is produced**. Good analysis begins with a question, a
+population or process, a unit of analysis, measurements, a design, and assumptions about how the data were
+generated. We begin with statistical questions, units of analysis, variables, measurement, and operational
+definitions, then study random sampling versus random assignment, bias, confounding, internal and external
+validity, completely randomized experiments, blocking, paired designs, factorial experiments, interactions,
+observational studies, causal diagrams, surveys, sampling frames, stratified and cluster sampling, missing
+data, nonresponse, and study critique. The course modernizes the traditional design-of-experiments course by
+placing experiments inside a broader evidence framework: experiments stay central because random assignment is
+one of the strongest tools for causal evidence, but most real work involves observational data, imperfect
+measurement, incomplete frames, and missing data. The emphasis throughout is reasoning, interpretation, and
+communication — recognizing what a study design can and cannot support.
+
+## Who it is for
+
+This course assumes a prior introductory statistics course or comparable preparation: you should be comfortable
+with variables, data tables, summary statistics, graphical summaries, confidence intervals, hypothesis tests,
+p-values, and basic regression *interpretation*. **Prior regression and prior coding are helpful but not
+required** — the course uses some regression ideas when discussing adjustment, confounding, and interactions,
+but the focus is design reasoning, not advanced modeling, and software examples are scaffolded. The main
+expectation is willingness to read studies carefully, write short evidence critiques, and explain design
+choices in complete sentences.
+
+## Learning outcomes
+
+By the end of the course, a successful student will be able to:
+
+- Translate a research question into units of analysis, variables, measurements, comparisons, and a target
+  claim.
+- Distinguish populations, samples, treatment and comparison groups, outcomes, covariates, and experimental
+  units.
+- Explain the difference between random sampling and random assignment and why each supports a different kind
+  of conclusion.
+- Identify common threats to validity: selection bias, measurement bias, confounding, attrition, nonresponse,
+  missing data, and post-treatment adjustment.
+- Design and analyze basic experiments with two or more groups, and use blocking, pairing, and factorial
+  designs to improve precision and structure.
+- Interpret main effects and interactions in designed studies.
+- Evaluate observational studies, distinguish association from causal evidence, and use simple causal diagrams
+  to reason about confounding, adjustment, and backdoor paths.
+- Explain the importance of sampling frames, coverage, nonresponse, and population definition, and compare
+  simple random, stratified, cluster, and multistage sampling.
+- Critique a study claim with attention to design, data quality, analysis, and communication, and write a
+  clear design memo stating what a study supports, what it does not, and what evidence would strengthen it.
+
+## Weekly rhythm
+
+This is a lecture/activity course meeting three days a week, and each day has a settled role:
+
+- **Monday — design concept + checkpoint.** We introduce a design or evidence concept, work through examples,
+  and complete a short checkpoint near the end of class.
+- **Wednesday — case, diagram, or analysis day.** We apply the week's idea to a study, dataset, causal diagram,
+  survey scenario, or experimental-design problem.
+- **Friday — quiz / critique day.** A short quiz on recent material, then a study-claim critique, a design
+  revision, or work on a design memo.
+
+This rhythm is the *plan*; the authoritative weekly schedule, including any shifts, lives in Blackboard.
+Attendance is not graded directly, but checkpoints, quizzes, labs, and in-class activities happen during class,
+so consistent attendance matters.
+
+## Assessment shape (indicative — not a contract)
+
+The table below conveys the **relative emphasis** of each graded category in qualitative terms only. It is
+**not** a grading contract: it carries no percentages and no point values, and the actual weights live in
+Blackboard.
+
+| Category | Rough emphasis |
+|----------|----------------|
+| Design checkpoints | small |
+| Weekly quizzes | small |
+| Design memos and homework | the largest single category |
+| Applied design labs | moderate |
+| Midterm | moderate |
+| Final design project | moderate |
+| Final exam | small |
+
+Read this as a picture of *where the weight sits*: regular design memos and homework are the backbone of the
+grade, the labs and the two big design instruments (midterm, project) carry moderate weight, and the smaller
+pieces — checkpoints, quizzes, and the final — add up around them. For the exact weighting, consult Blackboard.
+
+## Software and reproducibility
+
+We use **R** (through RStudio or Posit Cloud) and **Quarto**, along with spreadsheets and browser-based tools,
+for randomization activities, blocking and sampling demonstrations, and adjustment. Computation supports the
+reasoning rather than replacing it: you read, edit, and run code; interpret output; and write short written
+conclusions. Software output does not rescue a weak design — you are expected to explain what the data-
+production process allows you to claim. Setup instructions are on the [Causal-diagram guide](resources/causal-diagram-guide.qmd)
+and the resource pages.
+
+## AI use (summary)
+
+Generative AI tools may be used as a **study and workflow aid** — to explain a concept a second way, generate
+practice questions, suggest possible threats to validity, check your understanding of a causal diagram, or help
+debug code used in a lab. They may **not** produce work you submit as your own, complete study critiques, write
+design memos, invent study limitations, fabricate sources, or replace your responsibility to understand and
+verify the reasoning, and they are **prohibited on quizzes and exams** unless explicitly allowed.
+
+Because design and causal evidence are highly sensitive to assumptions, AI output must be checked carefully:
+many incorrect design explanations come from **confusing random sampling with random assignment**, overstating
+causal claims from observational data, ignoring measurement error, adjusting for the wrong variable, missing a
+selection problem, or treating statistical significance as proof that a design is strong. Whenever you use AI on
+a graded written assignment, lab, code submission, or project component, include a brief **AI Use Note** with
+three labeled lines:
+
+| Field | What to record |
+|-------|----------------|
+| Tool | which assistant you used (with approximate date or version) |
+| Purpose | what you used it for |
+| Verification | how you checked, tested, revised, or validated the output |
+
+**Verification** is the load-bearing line: redraw the causal diagram yourself, confirm whether a variable is
+pre- or post-treatment, compare the claim to the actual sampling and assignment mechanism, check a calculation,
+verify a source, or rewrite the explanation in your own words after checking it. The full policy lives in
+Blackboard.
+
+## Materials
+
+You will need:
+
+- **Instructor notes, examples, and design guides** — the primary course materials, posted on this site and in
+  Blackboard.
+- *Introduction to Modern Statistics*, 2nd ed. (Çetinkaya-Rundel & Hardin) — a free supplement, **CC BY-SA
+  3.0**, at [openintro-ims.netlify.app](https://openintro-ims.netlify.app/), used for study design, sampling,
+  and confounding.
+- *Statistical Inference via Data Science: A ModernDive into R and the Tidyverse*, 2nd ed. (Ismay, Kim &
+  Valdivia) — a free supplement, **CC BY-NC-SA 4.0**, at [moderndive.com/v2](https://moderndive.com/v2/), used
+  for randomization and sampling simulations.
+- **R, RStudio or Posit Cloud, and Quarto** (plus spreadsheets or browser tools) — for the design labs.
+- **Blackboard (the LMS)** — for all graded work, dates, and announcements.
+- A **non-graphing scientific calculator** for in-class quizzes; most computation is done in R.
+
+*Not used in this course:* Cengage, WebAssign, MyLab, or any paid homework platform.
+
+## Where things live
+
+Keep the two homes of the course straight:
+
+- **Blackboard (the LMS)** is the **operational** home: graded design checkpoints, quizzes, design memos and
+  homework, applied design labs, the midterm, the final design project, the final exam, all due dates, all
+  submissions, and all grades. It is authoritative.
+- **This public site** is the **public notes** home: weekly notes, labs as study material, resources, and
+  orientation pages. It is ungraded.
+
+::: {.callout-note}
+This companion exists to orient you. Whenever a graded specific is at stake — a weight, a deadline, a policy —
+go to Blackboard, which is authoritative.
+:::

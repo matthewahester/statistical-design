@@ -1,0 +1,81 @@
+---
+title: "Notes"
+subtitle: "The weekly design-and-evidence spine"
+page-type: orientation
+toc: true
+---
+
+The notes are the backbone of the course. There is one note per week, and reading the current week's note
+before class — and again after — is the single most reliable way to keep up. Every note follows the same shape,
+so once you learn to read one, you can read them all.
+
+## How to read a week
+
+Each weekly note is built from the same parts, in the same order. Knowing the anatomy lets you skim for what you
+need and study with intent:
+
+- **The week question.** A single design question that the week exists to answer. Hold it in mind as you read;
+  everything else is in service of it.
+- **Concept development.** The core ideas, built up in a few short sections from intuition toward a precise
+  statement about *what a design can claim*. This is the part to read slowly — and where the design, the
+  mechanism (sampling? assignment?), and the threats are made explicit.
+- **Worked examples.** Each idea is worked on the recurring campus world — the **Focus experiment**, the
+  **tutoring-center observational study**, or the **study-habits survey** — with the design set up, the
+  computation shown, and the result interpreted in sentences — plus one *transfer* example in a fresh context,
+  so you see the idea move.
+- **A common mistake.** The design error students most often make on this topic — confusing sampling with
+  assignment, reading association as causation, adjusting for the wrong variable — named plainly so you can
+  watch for it in your own work.
+- **Ungraded self-checks.** A few low-stakes practice prompts to test yourself. These are *self-check only* —
+  no points, no submission.
+- **Reading pointer.** Where to read more: the relevant *Introduction to Modern Statistics* topic (and, for the
+  randomization and sampling weeks, *ModernDive*; for the causal-diagram weeks, the optional *Causal Inference:
+  What If*), with the reminder that these notes are the course's own synthesis.
+- **Evidence and verification status.** An honest note that the numbers in the example studies are drafted and
+  synthetic, pending review — this is a draft course site.
+- **Looking ahead.** A sentence or two connecting this week to the next, so the design arc stays visible.
+
+Keep the [design glossary](../resources/design-glossary.qmd) and the
+[study-design reference](../resources/design-reference.qmd) open alongside the notes.
+
+## The four parts
+
+The fifteen weeks fall into four parts. Each part has a job, and the weeks within it build on one another.
+
+**Part I — Questions, measurement & validity.** What a statistical question is, how we measure, the signature
+distinction between sampling and assignment, and the threats a claim must survive.
+
+1. [Week 1 — Statistical questions & units of analysis](week-01-statistical-questions-and-units-of-analysis.qmd)
+2. [Week 2 — Measurement & operational definitions](week-02-measurement-variables-and-operational-definitions.qmd)
+3. [Week 3 — Random sampling vs random assignment](week-03-random-sampling-vs-random-assignment.qmd)
+4. [Week 4 — Bias, confounding & validity](week-04-bias-confounding-and-validity.qmd)
+
+**Part II — Designed experiments.** Randomized comparisons and the refinements that sharpen and structure them.
+
+1. [Week 5 — Completely randomized experiments](week-05-completely-randomized-experiments.qmd)
+2. [Week 6 — Blocking & paired designs](week-06-blocking-and-paired-designs.qmd)
+3. [Week 7 — Factorial experiments (midterm)](week-07-factorial-experiments-and-midterm.qmd)
+4. [Week 8 — Interactions in designed studies](week-08-interactions-in-designed-studies.qmd)
+
+**Part III — Observational & causal evidence.** Studies without random assignment, where confounding lurks and
+causal diagrams keep the reasoning honest.
+
+1. [Week 9 — Observational studies](week-09-observational-studies.qmd)
+2. [Week 10 — Causal diagrams & backdoor reasoning](week-10-causal-diagrams-and-backdoor-reasoning.qmd)
+
+**Part IV — Surveys, sampling & synthesis.** Survey sampling, missing data, study critique, and a closing
+synthesis.
+
+1. [Week 11 — Surveys & sampling frames](week-11-surveys-and-sampling-frames.qmd)
+2. [Week 12 — Stratified & cluster sampling](week-12-stratified-and-cluster-sampling.qmd)
+3. [Week 13 — Missing data & nonresponse](week-13-missing-data-and-nonresponse.qmd)
+4. [Week 14 — Study critique & design-memo workshop](week-14-study-critique-and-design-memo-workshop.qmd)
+5. [Week 15 — Final design memo & review](week-15-final-design-memo-and-review.qmd)
+
+## Public vs. graded
+
+These notes and the practice in them are **public and ungraded** — study material only. No graded prompts,
+answer keys, rubrics, point values, or due dates appear on this site. Graded design checkpoints, quizzes,
+design memos and homework, applied design labs, the midterm, the final design project, and the final exam live
+in **Blackboard (the LMS)**, which is authoritative for due dates, submissions, and grades. If this page and
+Blackboard ever disagree, follow Blackboard.
