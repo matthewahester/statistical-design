@@ -1,10 +1,15 @@
 ---
-title: "Design, Experiments & Causal Evidence"
-subtitle: "How statistical evidence is produced — from a question and a design to a defensible claim"
+pagetitle: "Design, Experiments & Causal Evidence"
 toc: false
 ---
 
-![](assets/hero.png){.course-hero-img fig-alt="Course identity hero for Design, Experiments and Causal Evidence — a tan desert-rose crystal cluster surrounded by study-design graphics including a design-to-evidence workflow, a causal diagram with a confounder and a backdoor path, and a blocking-improves-precision illustration, with the course title."}
+![](assets/hero-web.webp){.course-hero-img fig-alt="Course identity hero for Design, Experiments and Causal Evidence — a tan desert-rose crystal cluster surrounded by study-design graphics including a design-to-evidence workflow, a causal diagram with a confounder and a backdoor path, and a blocking-improves-precision illustration, with the course title."}
+
+# Design, Experiments & Causal Evidence {.course-landing-title}
+
+::: {.course-landing-subtitle}
+How statistical evidence is produced — from a question and a design to a defensible claim
+:::
 
 > Good statistical analysis does not begin with a p-value, a model, or a software procedure. It begins with a
 > **question**, a population or process of interest, a **unit of analysis**, **measurements**, a **design**,
