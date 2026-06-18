@@ -27,6 +27,9 @@ project:
     - "!run_reports/"
     - "!accessibility/"
 
+  resources:
+    - assets/hero-web.webp
+    - assets/hero-web-800.webp
 website:
   title: "Design, Experiments & Causal Evidence"
   site-url: https://matthewhester.com/statistical-design/
