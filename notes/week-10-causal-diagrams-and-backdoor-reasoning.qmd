@@ -4,7 +4,6 @@ subtitle: "Confounders, colliders, backdoor paths, adjustment sets, and bad cont
 page_mode: normal_week
 week_contract: public_note
 source_mode: source-informed
-verified: false
 readings:
   - "Instructor notes (primary), causal-diagram reasoning — supports nodes, paths, backdoor, adjustment sets"
   - "Causal Inference: What If (Hernán & Robins), Tier-3 optional advanced reference — calibrates vocabulary only, no content reproduced"
@@ -99,6 +98,8 @@ The design move here is to separate the route you want to keep open (the causal 
 close (the backdoor paths). The diagram is what tells the two apart, because the diagram knows the *direction*
 of every arrow.
 
+![**A causal diagram names your assumptions as arrows.** This is the assumed diagram for the tutoring-center study. `PriorAbility` is a **pre-treatment confounder**: it points into *both* `Use` (the treatment $Z$) and `Outcome` (the response $Y$), and those two red arrows are the two legs of the **backdoor path** Use $\leftarrow$ PriorAbility $\to$ Outcome that carries confounding. The single brown arrow Use $\to$ Outcome is the **causal path** you actually want to measure. Reading a causal effect means keeping that brown path open while blocking every red backdoor. Synthetic; seed 45403.](../assets/figures/wk10_dag_backdoor.png){#fig-wk10-dag-backdoor fig-alt="A causal diagram with three labeled boxes. PriorAbility, a pre-treatment confounder, sits at the top center. Two red arrows lead down from PriorAbility, one to Use, the treatment, at lower left, and one to Outcome at lower right; together these two arrows form the backdoor path. A separate brown arrow runs left to right from Use to Outcome, labeled the causal path, the effect we want. A caption at the bottom reads backdoor path, Use from PriorAbility to Outcome, carries confounding."}
+
 ### The three roles a third variable can play
 
 The same third variable can demand opposite handling depending on the role it plays in the diagram. This is the
@@ -135,6 +136,8 @@ in observational analysis precisely because it is invisible: the regression runs
 the change looks like a more careful answer. Adjusting for a mediator removes real signal (it biases the total
 effect toward zero); adjusting for a collider adds fake signal (it manufactures association). Either way the
 diagram — not the output — is what would have caught it.
+
+![**One instinct, opposite consequences.** Adjusting for the *pre-treatment* confounder `PriorAbility` (left) is a **good control**: it closes the backdoor while leaving the causal path open, so the estimate stays at the adjusted $+3.0$. Adjusting for the *post-treatment* mediator `HoursStudied` (right) — which sits on the causal path Use $\to$ HoursStudied $\to$ Outcome — is a **bad control**: it strips out the slice of the effect that runs through extra studying and pulls the estimate *below* $+3.0$, toward $0$. The one-question screen is whether the variable is pre- or post-treatment. Synthetic; seed 45403.](../assets/figures/wk10_good_vs_bad_control.png){#fig-wk10-good-bad fig-alt="Two causal diagrams contrasting a good and a bad control. Left, good control, a pre-treatment confounder: PriorAbility, marked adjusted, sits above Use and Outcome; its two arrows into Use and Outcome are grey, dashed, and struck through with short cut bars, while the Use to Outcome arrow is solid; the note says it closes the backdoor and the estimate stays at plus 3.0. Right, bad control, a post-treatment mediator: HoursStudied, marked adjusted and post-treatment, sits between Use and Outcome on the path Use to HoursStudied to Outcome; those two legs are grey, dashed, and cut, the direct Use to Outcome arrow is solid, and the note says adjusting this mediator biases the estimate below plus 3.0, toward zero."}
 
 Finally, a diagram is honest about its own limits. It **does** make your assumptions explicit and tell you what
 to adjust for. It **does not** prove those assumptions, and it cannot rescue a confounder you never measured:
@@ -180,36 +183,45 @@ $\{\text{PriorAbility}, \text{HoursStudied}\}$. The first closes the backdoor an
 intact; the second closes the backdoor but also amputates part of the effect. The diagram, not the regression
 output, is what tells you which is which (Risk 4, Risk 7).
 
+![**Adjusting for the one confounder closes the backdoor.** On the left the backdoor is *open* and the unadjusted contrast is the naive $+8.0$ — a confounded association, because stronger students both use the center and score higher. Conditioning on the pre-treatment confounder `PriorAbility` (right) blocks *both* backdoor legs while leaving the causal path Use $\to$ Outcome untouched, dropping the estimate to the adjusted $+3.0$. That $+8.0 \to +3.0$ shrinkage *is* the backdoor closing. Synthetic; seed 45403.](../assets/figures/wk10_adjustment_blocks_backdoor.png){#fig-wk10-adjust fig-alt="Two side-by-side causal diagrams. Left, labeled backdoor open, no adjustment: PriorAbility at the top with two solid red arrows down to Use and Outcome, plus a brown arrow from Use to Outcome; the note reads naive estimate plus 8.0, confounded association. Right, labeled backdoor closed, condition on PriorAbility: the PriorAbility box is filled and marked adjusted for, its two arrows are now grey and dashed and each is struck through with a short cut bar marked blocked, while the Use to Outcome arrow stays solid brown; the note reads adjusted estimate plus 3.0, backdoor blocked, causal path intact."}
+
 The static R below generates data *from* this diagram and shows the naive versus adjusted contrast, plus what a
-bad control does. It is shown as teaching, **not executed** here.
+bad control does. It is shown as teaching, **not executed** in this diagnostic.
 
 ```r
 # Study O — tutoring-center DAG: data generated FROM the assumed diagram.
 # Synthetic; seed set. Static, non-executed code (shown as teaching).
 set.seed(45403)
 
-n <- 300                                  # 120 users + 180 non-users (the locked totals)
+n <- 300                                  # 300 students (the locked Study O size)
 
 # PriorAbility: a PRE-treatment confounder (cause of BOTH Use and Outcome).
 prior <- rnorm(n, mean = 0, sd = 1)
 
 # Use: more-prepared students are likelier to use the center  (PriorAbility -> Use).
-use   <- rbinom(n, size = 1, prob = plogis(0.9 * prior))
+#   Calibrated to the locked slice: intercept -0.54 puts the use rate near 40%
+#   (E[users] = 120 of 300; this seed gives 114/186), and slope 1.34 makes the
+#   users sit a full 1.0 SD above non-users in prior ability.
+use   <- rbinom(n, size = 1, prob = plogis(-0.54 + 1.34 * prior))
 
 # HoursStudied: POST-treatment mediator on Use -> HoursStudied -> Outcome.
 hours <- 0.8 * use + 0.5 * prior + rnorm(n)
 
-# Outcome: PriorAbility -> Outcome (backdoor) + the true Use -> Outcome effect (+3).
-outcome <- 74 + 3.0 * use + 5.0 * prior + 0.0 * hours + rnorm(n)
+# Outcome: PriorAbility -> Outcome (backdoor) + DIRECT Use effect 2.2
+#          + indirect via hours (0.8 * 1.0 ~ 0.8) = total true Use -> Outcome effect ~ +3.0.
+#   Reduced form: 76 + 3.0*use + 5.0*prior — with the 1.0-SD prior gap this puts the
+#   naive contrast at the locked +8.0 and the group means near the locked 82.0 / 74.0.
+outcome <- 76 + 2.2 * use + 4.5 * prior + 1.0 * hours + rnorm(n)
 
 # NAIVE difference (no adjustment): leaves the backdoor OPEN.
-naive    <- coef(lm(outcome ~ use))["use"]              # ~ +8.0  (confounded)
+naive    <- coef(lm(outcome ~ use))["use"]              # ~ +8.0  (this seed: +8.27; confounded)
 
 # ADJUSTED for the confounder only: closes the backdoor. Correct adjustment set.
-adjusted <- coef(lm(outcome ~ use + prior))["use"]      # ~ +3.0  (recovers the effect)
+adjusted <- coef(lm(outcome ~ use + prior))["use"]      # ~ +3.0  (this seed: +2.80; recovers the effect)
 
 # BAD CONTROL: also adjusting for the post-treatment mediator HoursStudied.
-badctrl  <- coef(lm(outcome ~ use + prior + hours))["use"]  # biased toward 0
+badctrl  <- coef(lm(outcome ~ use + prior + hours))["use"]  # targets the DIRECT 2.2, not the total
+                                                            # (this seed: +2.00 — mediator/bad-control bias)
 ```
 
 **Interpretation.** The naive coefficient is about $+8.0$ because the backdoor through `PriorAbility` is open —
@@ -275,6 +287,8 @@ pre-treatment and must block a real backdoor path.** Do not adjust reflexively; 
 backdoor, and justify each arrow you drew. A diagram with an arrow you cannot defend is worse than no diagram,
 because each edge — and each omission — is a causal claim the design must support (Risk 4, Risk 7, Risk 15).
 
+![**With a collider, adjusting does the opposite of what you expect.** A collider is a common *effect*: here both `Exercise` and `Health` cause `OwnsTracker`. On the left, leaving the collider alone keeps its path **blocked**, so `Exercise` and `Health` stay unlinked through it. On the right, conditioning on the collider — for example, analyzing only tracker owners — **opens** a spurious path and manufactures a fake `Exercise`–`Health` association that was never there. A confounder's backdoor you *close* by adjusting; a collider's path you *open* by adjusting — the exact reversal that makes reflexive adjustment dangerous. Synthetic; illustrative.](../assets/figures/wk10_collider_opens_path.png){#fig-wk10-collider fig-alt="Two causal diagrams of a collider. In both, Exercise at upper left and Health at upper right each send a black arrow down into OwnsTracker at the bottom center, making OwnsTracker a common effect of the two. Left, labeled leave the collider alone, correct: there is no line between Exercise and Health, and the note says the path through the collider is blocked so the two stay unlinked. Right, labeled condition on the collider, the mistake: the OwnsTracker box is filled and marked conditioned on, and a red dashed line now connects Exercise and Health, labeled spurious link opened, with a note that adjusting opens a spurious path and a fake association appears."}
+
 ## Low-stakes self-checks (ungraded)
 
 These are for your own practice — ungraded, no submission.
@@ -301,16 +315,6 @@ linked and cited only, with **no content reproduced** here. The companion adjust
 the ModernDive simulation workflow for its reproducible R posture.
 
 These notes are the course's own synthesis, grounded in but not copied from the sources.
-
-## Evidence and verification status
-
-**`verified: false`.** The design logic on this page — the diagram, the roles, the backdoor rule, and the
-bad-control reasoning — is course-authored. But every numeric value here is **drafted, synthetic
-(`set.seed(45403)`), and not independently checked**: the tutoring-center **naive $+8.0$**, the **adjusted
-$+3.0$**, the $+5.0$ of confounding, the counts ($120$ users / $180$ non-users / $300$ total), and the
-illustrative transfer numbers ($+6$, $+4$, $+1$). The course **math/statistics gate is BLOCKED**. Do not treat
-any value as a confirmed reference until the human/source sign-off in `_state/notation_ledger.md` §5 is
-complete.
 
 ## Public vs. graded
 

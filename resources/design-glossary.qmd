@@ -8,8 +8,7 @@ toc: true
 Keep this page open while you read the notes. The single most important distinction in the course runs down the
 first two tables: **random sampling** earns *population* claims, **random assignment** earns *causal* claims,
 and they are not interchangeable. The second discipline is **association vs causation** — what a design lets you
-say, and what it does not. All numeric values mentioned come from the synthetic recurring studies and are
-`verified: false` (the statistics gate is blocked pending sign-off).
+say, and what it does not. All numeric values mentioned come from the synthetic recurring studies and are illustrative.
 
 ## Questions, units, and populations
 

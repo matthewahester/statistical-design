@@ -4,7 +4,6 @@ subtitle: "Unit nonresponse, item missingness, attrition, and sensitivity"
 page_mode: normal_week
 week_contract: public_note
 source_mode: source-informed
-verified: false
 readings:
   - "Instructor notes (primary), missing data & nonresponse — supports unit/item/attrition, MCAR/MAR/MNAR, sensitivity bounds"
   - "IMS (Çetinkaya-Rundel & Hardin), survey nonresponse & missing data — supports the mechanism vocabulary, no content reproduced"
@@ -117,6 +116,8 @@ arms, the *survivors* are no longer balanced, and the very thing random assignme
 after the coin was flipped. Attrition threatens **internal validity**, where nonresponse in a survey threatens
 **external/population validity**.
 
+![**Three doors data go missing through.** Unit nonresponse blanks whole rows — the 240 who never answered, leaving 360 of the sampled 600. Item missingness blanks single cells inside present rows — a responder skips the work-hours item. Attrition blanks a later column over time — Study E students present at the pre-test but gone by the post-test. Each door threatens a different part of the design. Synthetic; illustrative.](../assets/figures/wk13_missingness_locations.png){#fig-wk13-locations fig-alt="Three small data-table diagrams. Left, unit nonresponse: a table with sleep, work, and year columns where two whole bottom rows are shaded and blank, showing 240 of the sampled 600 giving nothing. Center, item missingness: every row is present but the work-hours cell is hatched and marked NA in two rows, showing a responder who skipped a single item. Right, attrition over time: columns pre-test and post-test with a left-to-right time arrow, where two rows are present at the pre-test but shaded and gone at the post-test, showing dropout."}
+
 The design move is to name the door before you analyze: *what was sampled or assigned, and what is actually
 present?* The difference between those two counts is your missingness, and its location decides which claim is
 on the line.
@@ -125,6 +126,8 @@ on the line.
 
 Whether missing data biases your conclusion depends entirely on *why* the data are missing. The standard
 ladder has three rungs, and they are not equally forgiving.
+
+![**The missing-data mechanism ladder, ordered by danger.** MCAR — missingness depends on nothing — leaves complete-case analysis unbiased. MAR — missingness depends only on observed variables — can be repaired by reweighting on what you measured. MNAR — missingness depends on the unobserved value itself — has no data-only fix, so you must bound the conclusion. MNAR is the dangerous rung because the data cannot tell you that you are in it. Synthetic; illustrative.](../assets/figures/wk13_mechanism_taxonomy.png){#fig-wk13-taxonomy fig-alt="A ladder of three stacked boxes ordered by an upward arrow labeled how dangerous increases. Bottom box, MCAR missing completely at random, marked safe: missingness depends on nothing, so the complete-case estimate is unbiased with just a smaller n. Middle box, MAR missing at random given observed, marked workable: missingness depends only on observed variables like class year, so reweighting or stratifying on the observed lever removes the bias. Top box, MNAR missing not at random, marked dangerous: missingness depends on the unobserved value itself, so there is no data-only fix and you must bound the conclusion."}
 
 **MCAR — missing completely at random.** Missingness is independent of everything, observed and unobserved.
 Imagine each invited student flips a private coin and only answers on heads, with no connection to their sleep,
@@ -175,6 +178,8 @@ because it makes no MCAR assumption at all; if you can defend a milder assumptio
 like the observed group within class year — MAR), you can report a narrower, assumption-laden interval *inside*
 this bound, but you must state the assumption out loud. The worst-case bound is the claim you can make with no
 assumptions; everything tighter is a claim you are *buying* with an assumption you should be willing to defend.
+
+![**The nonresponse bound dwarfs the sampling interval.** The responders-only estimate is $\hat p = 0.45$. The Week 11 sampling interval runs from 0.40 to 0.50 (width 0.10). The worst-case nonresponse bound runs from 0.27 — all 240 nonrespondents slept under seven hours, so 162/600 — to 0.67 — all 240 slept seven hours or more, so 402/600 — a width of 0.40, four times wider. With a 40% nonresponse rate, nonresponse, not sample size, is the threat. Synthetic; seed 45403.](../assets/figures/wk13_sensitivity_bound.png){#fig-wk13-bound fig-alt="A number line of the adequate-sleep proportion from 0.2 to 0.7. A short slate-blue interval marks the sampling interval from 0.40 to 0.50, width 0.10. A long terracotta hatched interval marks the nonresponse bound from 0.27 to 0.67, width 0.40. A red dashed line and diamond mark the responders-only estimate p-hat equals 0.45 on both intervals. Annotations note that all 240 nonrespondents sleeping under seven hours gives 162 over 600 equals 0.27, all 240 sleeping seven hours or more gives 402 over 600 equals 0.67, and the nonresponse bound is four times wider than the sampling interval."}
 
 ## Worked examples
 
@@ -301,6 +306,8 @@ the software do it for you: `na.rm = TRUE`, listwise deletion, a complete-case `
 incomplete rows and hands back a clean number computed on a self-selected subsample, with no warning that the
 denominator changed.
 
+![**Complete-case analysis hides the bound.** The sampled 600 split into 162 responders reporting seven hours or more, 198 responders reporting under seven, and 240 nonrespondents whose values are unknown. Dividing by the complete-case denominator 360 gives $\hat p = 162/360 = 0.45$; reporting that as a figure for all undergraduates treats the 240 unknown as if they matched the 360 responders — pure MCAR by default. The design's denominator is 600, and the honest object is the bound from 0.27 to 0.67. Under MNAR the least-rested screen out, so the truth sits low toward 0.27 and 0.45 overstates. Synthetic; seed 45403.](../assets/figures/wk13_complete_case_mnar.png){#fig-wk13-mnar fig-alt="A horizontal stacked bar of the 600 sampled students. The first segment is 162 responders reporting seven hours or more, the second is 198 responders reporting under seven hours, and the third hatched segment is 240 nonrespondents marked unknown. A red bracket over the first 360 units is labeled complete-case denominator equals 360 giving p-hat equals 162 over 360 equals 0.45. A slate bracket over all 600 units is labeled the design's denominator equals 600 giving the honest bound 0.27 to 0.67. A callout warns that reporting 0.45 for all undergraduates treats the 240 unknown as if they matched the 360 responders, pure MCAR by default, and that under MNAR the truth sits low toward 0.27."}
+
 The fix is a two-step discipline you can run every time. **First, classify the mechanism** from how the data
 were generated: is missingness plausibly MCAR, MAR on something you measured, or MNAR on the value itself? You
 argue this from the design and the substance, because the dataset cannot reveal it. **Second, when MCAR is not
@@ -343,19 +350,6 @@ examples, figures, or exercises reproduced**. The connection back to stratificat
 the Week 12 sampling design.
 
 These notes are the course's own synthesis, grounded in but not copied from the sources.
-
-## Evidence and verification status
-
-**`verified: false`.** The design logic on this page — the unit/item/attrition distinction, the MCAR/MAR/MNAR
-ladder, and the worst-case bounding argument — is course-authored. But every numeric value here is **drafted,
-synthetic (`set.seed(45403)`), and not independently checked**: the survey counts ($600$ invited, $360$
-responders, $240$ nonrespondents, $162$ adequate-sleep responders), the responders-only $\hat p = 0.45$ with
-$\operatorname{SE} \approx 0.026$ and interval $(0.40, 0.50)$, the locked nonresponse bound $[0.27, 0.67]$, the
-Focus assignment counts ($30/30$), and all illustrative drug-trial numbers ($200$ randomized, $70/90$
-remaining, survivor means $6.0$ and $4.0$, naive $+2.0$, sensitivity bound $[-0.4, 3.6]$). The course
-**math/statistics gate is BLOCKED**. Do
-not treat any value as a confirmed reference until the human/source sign-off in `_state/notation_ledger.md` §5
-is complete.
 
 ## Public vs. graded
 

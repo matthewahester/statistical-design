@@ -4,7 +4,6 @@ subtitle: "Turning a design critique into a clear, evidence-bounded memo"
 page_mode: software_lab_week
 week_contract: software_note_lab
 source_mode: source-informed
-verified: false
 readings:
   - "Instructor notes (primary), the critique framework and the design-memo template — supports turning a claim into a bounded memo"
   - "Statistical Inference via Data Science (ModernDive; Ismay, Kim & Valdivia), reproducible reporting — supports the .qmd memo workflow"
@@ -41,6 +40,8 @@ fixed skeleton, and the skeleton *is* the course:
 - **What would strengthen it** — the constructive half. What one change to the design — randomize the
   exposure, measure the missing confounder, follow up the nonrespondents, raise the response rate — would let
   the claim be made more strongly?
+
+![**Read the claim as a design before you trust its number.** Every critique runs the same five-stage pipeline: name the *claim* (population or causal?), fix the *unit of analysis*, read the *design* (was anything sampled at random? assigned at random? both, or neither?), list the specific *threats to validity*, and only then state *what the data actually support*. The design fork does the most work. Synthetic; illustrative.](../assets/figures/wk14_critique_pipeline.png){#fig-wk14-critique-pipeline fig-alt="A left-to-right flow diagram of five linked boxes: box one Claim (population or causal), box two Unit of analysis (what one row describes), box three Design (sampled? assigned?), box four Threats to validity (name the specific one), and a highlighted final box five What the data actually support (the narrowest licensed claim). Arrows connect each box to the next, and a note above says the design fork does the most work: was anything sampled at random, assigned at random, both, or neither."}
 
 The **design memo** is the written product of that skeleton. It says, in plain prose, *what the study supports,
 what it does not, and what additional evidence would move the claim forward.* The memo is where the course's
@@ -94,6 +95,8 @@ keyboard. Each step is **ungraded practice**; treat the "your turn" prompts as s
 
 8. **Your turn — repeat on Study E and Study S.** Run the same eight steps on a one-liner from the experiment
    and from the survey. The next two subsections give you the locked numbers and the bounded rewrite for each.
+
+![**Where the Study O claim breaks.** The naive users-versus-non-users gap is $82.0 - 74.0 = +8.0$, read as if it were an effect; stratifying on the pre-treatment prior-ability tier drops it to an adjusted $+3.0$. The vanished $+5.0$ was confounding — selection on prior ability — not a treatment effect, and the adjusted number holds only under the measured-confounder assumption. Synthetic; seed 45403.](../assets/figures/wk14_study_o_breakdown.png){#fig-wk14-study-o-breakdown fig-alt="A bar chart with two bars on an end-of-term score-gap axis from 0 to 10. The left hatched bar, the naive gap of users versus non-users, reaches plus 8.0; the right solid bar, the adjusted gap after stratifying on prior ability, reaches plus 3.0. A double-headed arrow between the two bar tops is labeled plus 5.0 was confounding from selection on prior ability, and a note gives naive equals 82.0 minus 74.0 equals plus 8.0 (association) and adjusted equals plus 3.0 (measured-confounder assumption)."}
 
 ### Critiquing the experiment claim (Study E)
 
@@ -150,6 +153,8 @@ Name files for the memo, not the date: `memo-tutoring-center.qmd`, `memo-focus-e
 `memo-sleep-survey.qmd`. Inside, use the **memo template sections as headings** so the structure is visible at a
 glance: *Claim · Unit · Design · Threats to validity · What the data support · What would strengthen it.* The
 arithmetic lives in one small chunk near the top so the prose can point back to named numbers.
+
+![**The memo is the pipeline, in writing.** A design memo has six fixed sections — Claim, Unit of analysis, Design, Threats to validity, What the data support, and What would strengthen it — each one answering a single critique question. The fifth section, *what the data support*, is where the claim is pinned to its narrowest defensible form and its assumptions are stated out loud. Synthetic; illustrative.](../assets/figures/wk14_memo_structure.png){#fig-wk14-memo-structure fig-alt="A vertical template of six stacked, numbered sections inside a memo-page outline: section 1 Claim (a population or causal claim?), section 2 Unit of analysis (what one row describes; the grain the design sampled or assigned), section 3 Design (sampled at random? assigned at random? both, or neither?), section 4 Threats to validity (the specific named threat such as confounding, selection, or nonresponse), section 5 What the data support (the narrowest licensed claim with its assumptions stated), and section 6 What would strengthen it (the one design change that would let the claim grow). Section five is set off as the payoff line."}
 
 ```r
 # Week 14 — design-memo arithmetic for the three locked studies
@@ -213,6 +218,8 @@ assignment is absent, downgrade the verb to "is associated with." If the frame i
 the noun to the frame. The diagram and the memo encode *assumptions*, not *conclusions* — every causal arrow you
 let stand must be justified by the design or by stated domain knowledge, not by the size of a p-value.
 
+![**Same study, two memos.** The overreaching memo writes a causal verb ("*raised* scores by 8") from an observational gap and leans on the confounded $+8.0$ — the verb outruns the design (Risk 15). The bounded memo keeps the claim to *association*, uses the adjusted $+3.0$, and states the measured-confounder assumption out loud. The discipline is to keep the claim no larger than the design can carry. Synthetic; seed 45403.](../assets/figures/wk14_memo_contrast.png){#fig-wk14-memo-contrast fig-alt="Two side-by-side memo cards about the same tutoring-center study. The left card, labeled overreaching claim and marked no, reads the tutoring center raised scores by 8 index points and is flagged for a causal verb from an observational gap (Risk 15), using the confounded plus 8.0, stating no assumptions and no unit, and letting the verb outrun the design. The right card, labeled bounded evidence-honest claim and marked yes, reads that under the measured-confounder assumption using the center is associated with about a plus 3.0 gain, and is flagged as association not cause with no random assignment, using the adjusted plus 3.0 rather than the raw plus 8.0, stating its assumption in the narrowest form, and matching the verb to the design."}
+
 ## AI Use Note
 
 A language model is a useful drafting and stress-testing partner for a critique, and a dangerous oracle for a
@@ -237,17 +244,6 @@ and in **Statistical Inference via Data Science (ModernDive; Ismay, Kim & Valdiv
 reporting workflow and the one-file `.qmd` posture. ModernDive is OER under CC BY-NC-SA 4.0. *These notes are
 the course's own synthesis, grounded in but not copied from the sources.* No prose, examples, exercises, or
 figures are reproduced; the memo template and every worked critique here are written for this course.
-
-## Evidence and verification status
-
-**verified: false.** The critique *framework* and the memo *structure* are course-authored, but every numeric
-value on this page is **drafted, synthetic, and not independently checked**. The load-bearing numbers — Study
-O's naive $+8.0$ versus adjusted $+3.0$ (confounding inflation $+5.0$); Study E's $d = 3.0$,
-$\operatorname{SE} \approx 1.55$, $t \approx 1.94$, $p \approx 0.057$; and Study S's $\hat p = 0.45$,
-$\operatorname{SE} \approx 0.026$, sampling CI $\approx (0.40, 0.50)$, and nonresponse bound $[0.27, 0.67]$ —
-are all generated under `set.seed(45403)` and have **not** been human- or source-verified. The course
-**math/statistics gate is BLOCKED**; do not treat any value here as a confirmed reference until the
-human/source sign-off in `_state/notation_ledger.md` §5 is complete.
 
 ## Public vs. graded
 

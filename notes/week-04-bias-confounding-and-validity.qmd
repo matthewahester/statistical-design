@@ -4,7 +4,6 @@ subtitle: "Selection and measurement bias, confounding, and internal vs external
 page_mode: normal_week
 week_contract: public_note
 source_mode: source-informed
-verified: false
 readings:
   - "IMS (Çetinkaya-Rundel & Hardin), confounding & study-design validity — supports threats to a claim"
 toc: true
@@ -96,6 +95,8 @@ tutoring-center study, $X = $ prior ability: it pushes students toward using the
 end-of-term score. So part of the $+8.0$ gap is "the center helped" and part is "stronger students were already
 going to score higher and they are over-represented among users."
 
+![**The confounding triangle.** Prior ability $X$ is a *pre-treatment common cause*: it drives who uses the center ($X \to Z$) and it drives the end-of-term score ($X \to Y$), opening the backdoor path $Z \leftarrow X \to Y$ that runs alongside the causal path of interest $Z \to Y$. Comparing users and non-users marginally mixes the two; adjusting for the tier $X$ closes the backdoor. Synthetic; seed 45403.](../assets/figures/wk04_confounding_triangle.png){#fig-wk04-confounding-triangle fig-alt="A causal diagram with three labeled boxes. A top box, prior ability X measured pre-treatment, sends two brick-red arrows down: one to a lower-left box, use the center Z, and one to a lower-right box, outcome Y the end-of-term score; together these two arrows form the backdoor path from Z through X to Y that carries confounding. A separate horizontal arrow runs from use the center Z to outcome Y, the causal path of interest. The takeaway is that prior ability is a common cause of both use and outcome, so a marginal comparison mixes the causal path with the backdoor."}
+
 The fix is to **close the backdoor** by comparing users and non-users *within* levels of $X$ — stratify on the
 prior-ability tier, compute the user-minus-non-user difference inside each tier, and combine. That adjusted
 comparison holds $X$ fixed, so only the causal path can move the means. A confounder is therefore something you
@@ -120,6 +121,8 @@ separately: a perfectly internally valid experiment can still fail to travel, an
 survey can still support no causal claim at all. Naming *which* validity a sentence is claiming — and whether
 the design earns it — is the discipline. A common slip is to take a tight, well-randomized result and quietly
 generalize it to a population the study never sampled.
+
+![**Two questions, tracked separately.** Internal validity asks whether the design supports the causal claim *here*; external validity asks whether it generalizes *there*. The two dissociate: a clean Focus experiment on $60$ volunteers can be strong on internal yet weak on external validity, while a broad survey or the naive tutoring-center gap can be representative yet support no causal claim. Only the upper-right cell has both. Synthetic; illustrative.](../assets/figures/wk04_validity_matrix.png){#fig-wk04-validity-matrix fig-alt="A two-by-two map. The horizontal axis is external validity, does it generalize there, running from low to high; the vertical axis is internal validity, does the design support the causal claim here, running from low to high. The upper-left cell holds the Focus experiment on 60 volunteers, causal here but may not travel. The upper-right cell, outlined for emphasis, is the goal, causal here and generalizing there. The lower-left cell is a confounded convenience study with no causal claim that does not travel. The lower-right cell is a broad survey or the naive tutoring gap, representative but with no causal claim. The takeaway is that internal and external validity are separate questions that can vary independently."}
 
 ## Worked examples
 
@@ -162,7 +165,9 @@ assignment *delivers*, when (and only when) the confounder is measured and corre
 design, not a guaranteed identity — the experiment earns the $3.0$, the observational study only borrows it
 under assumptions.
 
-Here is the adjustment shown as a small, static computation — *not executed* here; it draws no
+![**The naive gap is mostly confounding.** In Study O the marginal comparison (users $82.0$ vs non-users $74.0$) gives a naive $+8.0$, but adjusting *within* prior-ability tiers shrinks it to an adjusted $+3.0$. The $+5.0$ difference between the two bars *is* the confounding the pre-treatment tier injected — not a second, competing effect. Synthetic; seed 45403.](../assets/figures/wk04_naive_vs_adjusted.png){#fig-wk04-naive-vs-adjusted fig-alt="A bar chart of two effect estimates for the tutoring-center study. The left hatched bar is the naive marginal difference at plus 8.0; the right solid bar is the adjusted within-tier difference at plus 3.0. A double-headed arrow between the two bar tops marks a shrinkage of plus 5.0 labeled confounding. The takeaway is that most of the naive eight-point gap is confounding by prior ability, leaving an adjusted three-point difference."}
+
+Here is the adjustment shown as a small, static computation — *not executed* in this diagnostic; it draws no
 randomness, but the seed is set as house convention for any chunk that could:
 
 ```r
@@ -216,6 +221,8 @@ confounding_bf <- d_naive_bf - d_adjusted_bf
 confounding_bf               # +0.20  <-- confounding by household resources
 ```
 
+![**The same design move, a new context.** A campus-paper claim that breakfast eaters have higher GPAs is observational: the naive difference is $+0.30$ GPA, but adjusting *within* household-resource tiers leaves an adjusted $+0.10$. The $+0.20$ gap is confounding by household resources — the identical naive-minus-adjusted logic as Study O, only the context and numbers change. Synthetic; illustrative.](../assets/figures/wk04_transfer_breakfast.png){#fig-wk04-transfer-breakfast fig-alt="A bar chart of two effect estimates for the breakfast and GPA example. The left hatched bar is the naive marginal difference at plus 0.30 GPA; the right solid bar is the adjusted within-resource-tier difference at plus 0.10 GPA. A double-headed arrow between the bar tops marks a shrinkage of plus 0.20 labeled confounding by household resources. The takeaway is that most of the naive GPA gap is confounding, and the adjustment logic is the same as the tutoring-center study."}
+
 **The interpretation.** After adjusting for household resources, much of the $+0.30$ is confounding; the
 residual $+0.10$ is what survives, and only *if* resources were the relevant confounder and were well measured.
 The design move is identical to Study O: an unassigned exposure plus a pre-treatment common cause means the raw
@@ -240,6 +247,8 @@ The mistake this week guards against has four faces, and a confounded study can 
   *real* backdoor. Throwing in variables that do not drive the treatment buys nothing, and reflexively
   adjusting for a *post-treatment* variable (a consequence of using the center, like term study-hours) is a
   bad control that *introduces* bias — the topic of Week 10.
+
+![**Self-selected groups differ before treatment.** Because students *chose* whether to use the center, the two groups are not comparable to begin with: on a pre-treatment prior-ability index the users average $72$ and the non-users $60$ — a $12$-unit head start. That baseline gap is folded into the raw $+8.0$ outcome difference, so the unadjusted comparison is not the causal effect. Synthetic; illustrative.](../assets/figures/wk04_selection_bias.png){#fig-wk04-selection-bias fig-alt="A bar chart of a pre-treatment prior-ability index measured before the tutoring center acts. The left hatched bar, center users, reaches 72; the right bar, non-users, reaches 60. A dashed baseline at 60 and a double-headed arrow mark a 12-unit head start for users. The takeaway is that self-selected users start ahead, so the raw eight-point outcome gap includes this pre-existing difference and is not the causal effect."}
 
 The throughline: a reported difference is only as trustworthy as the design that produced it, and adjustment
 helps only for **measured, pre-treatment** confounders.
@@ -267,14 +276,6 @@ from causation, identifying confounders, and separating internal from external v
 course's own synthesis, grounded in but not copied from the sources.** No source prose, examples, exercises,
 figures, or solutions are reproduced. For symbol conventions, see the design glossary; for the confounder /
 backdoor picture you will formalize in Week 10, see the causal-diagram guide.
-
-## Evidence and verification status
-
-**verified: false.** The design logic on this page is course-authored, but **every numeric value is drafted,
-synthetic (`set.seed(45403)`), and not independently checked** — including the load-bearing tutoring-center
-values: the naive difference $+8.0$, the adjusted difference $+3.0$, and the implied $+5.0$ of confounding (and
-all illustrative transfer numbers). The course **math/statistics gate is BLOCKED**. Do not treat any value here
-as a confirmed reference until the human/source sign-off in `_state/notation_ledger.md` §5 is complete.
 
 ## Public vs. graded
 

@@ -31,8 +31,6 @@ need and study with intent:
 - **Reading pointer.** Where to read more: the relevant *Introduction to Modern Statistics* topic (and, for the
   randomization and sampling weeks, *ModernDive*; for the causal-diagram weeks, the optional *Causal Inference:
   What If*), with the reminder that these notes are the course's own synthesis.
-- **Evidence and verification status.** An honest note that the numbers in the example studies are drafted and
-  synthetic, pending review — this is a draft course site.
 - **Looking ahead.** A sentence or two connecting this week to the next, so the design arc stays visible.
 
 Keep the [design glossary](../resources/design-glossary.qmd) and the

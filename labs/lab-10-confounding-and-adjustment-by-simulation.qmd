@@ -4,7 +4,6 @@ subtitle: "Generating data from a causal diagram to see adjustment work — and 
 page_mode: software_lab_week
 week_contract: software_note_lab
 source_mode: source-informed
-verified: false
 toc: true
 ---
 
@@ -38,6 +37,8 @@ near $+8.0$ — the locked Study O naive difference — because confounding infl
 correct adjustment lands near $+3.0$. The bad control drifts *below* $+3.0$, biased toward zero, even though the
 code ran without a single warning. That silence is the whole lesson: a bad control does not throw an error. The
 diagram is the only thing that would have stopped you.
+
+![**Two estimators, two very different targets.** Repeating the simulated Study O 800 times, the **naive** difference in means clusters near $+8.0$ while the **adjusted** estimate — conditioning on the pre-treatment `PriorAbility` — clusters on the truth at $+3.0$. The $+5.0$ gap between the two centers is exactly the confounding leaking through the open backdoor. Synthetic; seed 45403.](../assets/figures/lab10_naive_vs_adjusted.png){#fig-lab10-naive-vs-adjusted fig-alt="Two histograms of estimated effects across 800 simulated studies. A slate-blue hatched histogram, the naive estimate, is centered near plus 8.0. A terracotta histogram, the adjusted-for-prior-ability estimate, is centered near plus 3.0, sitting on a dashed line that marks the true effect of plus 3.0. A double-headed arrow across the top spans the two centers and is labeled confounding equals plus 5.0. The naive estimator is biased upward while the adjusted estimator is unbiased."}
 
 This keeps the course's central distinction in view. Random *assignment* would have closed every backdoor for
 you by design and earned a *causal* claim outright. Here you have only observation plus a defensible adjustment
@@ -74,6 +75,8 @@ will reproduce or honor:
 - The intended parallel: that adjusted $+3.0$ deliberately matches Study E's randomized experimental effect
   $d = 3.0$ — careful adjustment *approximates* what random assignment *guarantees*, but only when the
   confounder is measured and the diagram is right.
+
+![**Stratifying makes the confounding visible — and removes it.** Splitting students into pre-treatment prior-ability tiers, the user-versus-non-user gap is $+3.0$ inside *every* tier, and averaging those within-tier gaps gives the adjusted $+3.0$. The naive pooled comparison reads $+8.0$ only because users concentrate in the higher-scoring tiers. Synthetic; illustrative.](../assets/figures/lab10_stratify_tiers.png){#fig-lab10-stratify-tiers fig-alt="A grouped bar chart with three prior-ability tiers on the horizontal axis: low, medium, and high. In each tier a slate-blue non-users bar and a terracotta hatched users bar are shown, with the score axis starting at 60. The users bar is exactly 3.0 points above the non-users bar in every tier: 74 versus 77, then 77 versus 80, then 80 versus 83. A note states the within-tier gap is plus 3.0 at every tier, which gives the adjusted plus 3.0, while the naive pooled difference is plus 8.0."}
 
 The diagram you are simulating from (authored as accessible text, exactly as in the week note):
 
@@ -116,31 +119,38 @@ Splitting the effect this way is what makes the bad control *do* something: beca
 # Synthetic; seed set. Static, non-executed code (shown for study).
 set.seed(45403)
 
-n <- 300                                   # 120 users + 180 non-users (the locked totals)
+n <- 300                                   # 300 students total (the locked Study O size)
 
 # PriorAbility: a PRE-treatment confounder — common cause of BOTH Use and Outcome.
 prior  <- rnorm(n, mean = 0, sd = 1)
 
 # Use: more-prepared students are likelier to use the center  (PriorAbility -> Use).
 #   plogis() turns the linear score into a probability; rbinom() flips the coin.
-use    <- rbinom(n, size = 1, prob = plogis(0.9 * prior))
+#   The two constants are CALIBRATED to the locked slice: the intercept -0.54 sets
+#   the overall use rate near 40% (so E[users] = 120 of 300, the locked 120/180),
+#   and the slope 1.34 makes self-selection strong enough that users sit a full
+#   1.0 SD above non-users in prior ability — which is exactly what pushes the
+#   naive comparison to the locked +8.0 (see the outcome line below).
+use    <- rbinom(n, size = 1, prob = plogis(-0.54 + 1.34 * prior))
 
 # HoursStudied: POST-treatment mediator on the path Use -> HoursStudied -> Outcome.
 #   Use lifts hours by 0.8; that lift is the FIRST leg of the mediated path.
 hours  <- 0.8 * use + 0.5 * prior + rnorm(n)
 
-# Outcome: baseline 74 + a DIRECT Use effect (2.2) + the mediated effect through
+# Outcome: baseline 76 + a DIRECT Use effect (2.2) + the mediated effect through
 #   hours (1.0 * hours) + the confounder's pull (4.5 * prior). Two checks built in:
 #   - TOTAL Use effect = 2.2 (direct) + 1.0 * 0.8 (through hours) = +3.0  (locked adjusted).
 #   - TOTAL prior pull = 4.5 (direct) + 1.0 * 0.5 (through hours) = +5.0  (the confounding
-#     that leaks into the naive +8.0). So the reduced form is 74 + 3.0*use + 5.0*prior.
+#     that leaks into the naive +8.0). So the reduced form is 76 + 3.0*use + 5.0*prior,
+#     and with the 1.0-SD user/non-user prior gap: naive = 3.0 + 5.0*(1.0) = +8.0,
+#     users near 76 + 3 + 5*(0.6) = 82.0 and non-users near 76 + 5*(-0.4) = 74.0.
 #   Because part of the +3.0 travels Use -> HoursStudied -> Outcome, holding hours
 #   fixed (adjusting for it) SUBTRACTS that slice, so the bad control lands below +3.0.
-outcome <- 74 + 2.2 * use + 1.0 * hours + 4.5 * prior + rnorm(n)
+outcome <- 76 + 2.2 * use + 1.0 * hours + 4.5 * prior + rnorm(n)
 
 study_o <- data.frame(use, prior, hours, outcome)
 nrow(study_o)            # 300  (matches the locked total)
-table(study_o$use)       # roughly split into users (1) and non-users (0)
+table(study_o$use)       # near the locked 120 / 180 (this seed: 114 users, 186 non-users)
 ```
 
 **Interpretation.** You have built a world in which the *true total* causal effect of using the center is
@@ -160,12 +170,12 @@ plain difference in group means, which `lm(outcome ~ use)` reports as the `use` 
 # NAIVE difference in means: users vs non-users, NO adjustment. Backdoor OPEN.
 set.seed(45403)   # seed restated so this block reproduces standalone
 
-mean_user    <- mean(study_o$outcome[study_o$use == 1])   # ~ 82.0  (the locked user mean)
-mean_nonuser <- mean(study_o$outcome[study_o$use == 0])   # ~ 74.0  (the locked non-user mean)
-naive_diff   <- mean_user - mean_nonuser                  # ~ +8.0  (confounded)
+mean_user    <- mean(study_o$outcome[study_o$use == 1])   # ~ 82.0  (this seed: 81.9)
+mean_nonuser <- mean(study_o$outcome[study_o$use == 0])   # ~ 74.0  (this seed: 73.7)
+naive_diff   <- mean_user - mean_nonuser                  # ~ +8.0  (this seed: +8.27; confounded)
 
 naive_lm <- coef(lm(outcome ~ use, data = study_o))["use"]
-naive_lm                                                  # ~ +8.0  (same number, via lm)
+naive_lm                                                  # same number, via lm
 ```
 
 **Interpretation.** The naive difference is about $+8.0$ — the locked Study O naive number, with user mean near
@@ -187,17 +197,19 @@ post-treatment mediator `HoursStudied`, the bad control the diagram warned again
 set.seed(45403)
 
 adjusted <- coef(lm(outcome ~ use + prior, data = study_o))["use"]
-adjusted                       # ~ +3.0  (recovers the TRUE effect)
+adjusted                       # ~ +3.0  (this seed: +2.80; recovers the TRUE effect)
 
 # BAD CONTROL: ALSO adjust for the post-treatment mediator HoursStudied.
 #   The code runs cleanly — no warning, no error — but the estimate is now wrong.
+#   Its target is the DIRECT effect (2.2), not the total +3.0 you asked for.
 bad_control <- coef(lm(outcome ~ use + prior + hours, data = study_o))["use"]
-bad_control                    # < +3.0  (biased toward 0; "looks careful," answers wrong question)
+bad_control                    # < +3.0  (this seed: +2.00; biased toward 0 —
+                               #  "looks careful," answers the wrong question)
 
 # Side by side, so the three numbers tell the story at a glance.
 round(c(naive = naive_lm, adjusted = adjusted, bad_control = bad_control), 2)
-#   naive   adjusted  bad_control
-#   ~ 8.0     ~ 3.0      < 3.0
+#   naive   adjusted  bad_control      (this seed: 8.27, 2.80, 2.00 —
+#   ~ 8.0     ~ 3.0      < 3.0          open backdoor, closed backdoor, mediator removed)
 ```
 
 **Interpretation.** Adjusting for `PriorAbility` recovers about $+3.0$ — the locked adjusted Study O effect, and
@@ -211,17 +223,22 @@ you asked for — you have measured a partial "direct effect holding studying fi
 estimate *looks* more careful because it has more variables in it, but it answers a different, narrower
 question, and nothing in the output flags the switch.
 
+![**A bad control does not "fix" the estimate — it biases it.** The same simulated data give three estimates of the `Use` effect: the naive $+8.0$ (backdoor open, biased up), the correctly adjusted $+3.0$ (on the true effect), and the bad control that *also* conditions on the post-treatment `HoursStudied` and lands at $+2.2$ — biased *below* the truth. Conditioning on the mediator subtracts the $0.8$ that travels `Use` to `HoursStudied` to `Outcome`. Synthetic; illustrative.](../assets/figures/lab10_bad_control.png){#fig-lab10-bad-control fig-alt="A bar chart of three estimates of the effect of Use on Outcome, with a dashed line marking the true effect at plus 3.0. The naive model bar reaches plus 8.0 and is labeled biased up. The adjusted model bar, use plus prior, reaches plus 3.0 and is labeled on target. The bad-control model bar, use plus prior plus hours, reaches only plus 2.2 and is labeled biased down, with a small downward arrow showing minus 0.8 for the mediated slice that was removed. Adding a post-treatment control moved the estimate the wrong way, away from the truth."}
+
 ## Verify
 
 This is where computation and reasoning meet. Check three things, in order:
 
 1. **The counts match the design.** `nrow(study_o)` is $300$ and `table(study_o$use)` splits into users and
-   non-users near the locked $120 / 180$. If the total is not $300$, your `n` is wrong and every downstream
-   number is comparing the wrong-sized world.
-2. **The three estimates are ordered as the diagram predicts.** You should see `naive` $\approx +8.0$ (open
-   backdoor), `adjusted` $\approx +3.0$ (backdoor closed), and `bad_control` $< +3.0$ (mediator removed real
-   signal). The gap between naive and adjusted is the $\approx +5.0$ of confounding the locked slice names. If
-   `adjusted` does not land near $+3.0$, re-check that the `outcome` line carries `2.2 * use + 1.0 * hours` (a
+   non-users near the locked $120 / 180$ — with the course seed you get exactly $114 / 186$. If the total is
+   not $300$, your `n` is wrong and every downstream number is comparing the wrong-sized world.
+2. **The three estimates are ordered as the diagram predicts.** With the course seed you should see `naive`
+   $= +8.27$ (open backdoor; the estimator centers on the locked $+8.0$), `adjusted` $= +2.80$ (backdoor
+   closed; centers on the true $+3.0$), and `bad_control` $= +2.00$ (mediator removed real signal; its target
+   is the direct $2.2$). The naive-minus-adjusted gap — $5.5$ this seed, $\approx +5.0$ in expectation — is
+   the confounding the locked slice names. A single $n = 300$ run wobbles around these centers (the naive by
+   roughly $\pm 1$ point across seeds; the 800-run figure at the top shows the centers themselves). If
+   `adjusted` lands far from $+3.0$, re-check that the `outcome` line carries `2.2 * use + 1.0 * hours` (a
    direct $2.2$ plus the $0.8$ that rides through `hours`, totalling the locked $+3.0$) and that
    `set.seed(45403)` ran before the data were generated.
 3. **The truth is recoverable only by the correct set.** Because you *built in* the true total effect of $+3.0$,
@@ -240,6 +257,8 @@ A standing caveat to carry forward: this simulation succeeds because *you* know 
 In a real study, an **unmeasured** common cause would leave a backdoor open that no adjustment can close, and
 the estimate would be wrong with no warning at all. That irreducible limit of observational evidence is exactly
 why random assignment — which closes every backdoor by design — is worth so much (Risk 15).
+
+![**Your turn: dial the confounder up and down.** Sweeping the confounder strength, the **naive** estimate slides — the stronger the pre-treatment common cause, the further it drifts above the truth — while the **adjusted** estimate holds flat at $+3.0$ the whole way. Study O sits at strength $1.0$, where the naive reads $+8.0$ and the adjusted reads $+3.0$. Before you re-run the code, predict where the naive lands if you halve the confounder strength. Synthetic; seed 45403.](../assets/figures/lab10_confounder_strength.png){#fig-lab10-confounder-strength fig-alt="A line chart with confounder strength on the horizontal axis from 0 to about 1.6 and estimated effect on the vertical axis. A dashed rising line, the naive estimate, climbs from plus 3.0 at zero confounding to about plus 11 at the strongest setting. A solid flat line, the adjusted-for-prior-ability estimate, stays at plus 3.0 across the whole range. Simulated study estimates scatter as square and round markers around the two lines. A star marks Study O at strength 1.0, where the naive estimate is plus 8.0 and the adjusted estimate is plus 3.0."}
 
 ## Transfer challenge (ungraded)
 

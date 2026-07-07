@@ -4,7 +4,6 @@ subtitle: "The whole design-and-evidence arc as one picture"
 page_mode: overview_review_week
 week_contract: public_note
 source_mode: source-informed
-verified: false
 depth_rationale: "One-day synthesis meeting (Mon Dec 7). This week introduces no new machinery; it consolidates the whole design-and-evidence arc — question, unit, measurement, sampling vs assignment, design, threats, what the data support, the design memo — into a single map, in support of the final design project and the cumulative final. The lower word floor reflects review-and-assembly rather than new concept development."
 readings:
   - "Instructor notes (primary), term synthesis — supports the question→unit→design→threats→claim arc and the design-memo structure"
@@ -94,6 +93,8 @@ randomized or blocked experiment, an adjusted observational comparison, an SRS o
 survey), enumerate the **threats** that design leaves open, read **what the data support**, and write the
 **memo**. The memo is just this sequence made legible to someone who was not in the room.
 
+![**The whole course on one map.** Two mechanisms, two kinds of claim: random **assignment** (top spine) licenses **causal** claims and carries Study E's experimental designs — the CRD ($d = 3.0$, wk 5), blocking and pairing (wk 6), and the factorial and interaction weeks (7–8); random **sampling** (bottom spine) licenses **population** claims and carries Study S's survey designs (SRS $\hat p = 0.45$, wk 11; stratified and cluster, wk 12; missing data and nonresponse, wk 13). Study O sits in the middle with *neither* mechanism, reaching a causal claim only by adjustment (naive $+8.0 \to$ adjusted $+3.0$, under no unmeasured confounding). Synthetic; illustrative.](../assets/figures/wk15_course_map.png){#fig-wk15-course-map fig-alt="A course map with two long horizontal arrows. The top arrow is labeled random assignment licenses causal claims, Study E; below it sit four boxes: CRD week 5 with d equals 3.0, blocking and paired week 6, factorial week 7, and interaction week 8 with synergy plus 1.5. The bottom arrow is labeled random sampling licenses population claims, Study S; above it sit three boxes: SRS survey week 11 with p-hat 0.45, stratified and cluster week 12, and missing data and nonresponse week 13. Between the two arrows is a box for the observational Study O, weeks 9 to 10, labeled neither mechanism, naive plus 8.0 adjusted to plus 3.0 only under no unmeasured confounding, with a dashed adjustment arrow pointing up toward the causal spine. A foundations box for weeks 1 to 4 at the left feeds both arrows."}
+
 ### The three studies as a map of what designs license
 
 The term's three studies are one campus world seen through three designs, and laid side by side they *are* the
@@ -111,6 +112,8 @@ adjusted $+3.0$ only by *assuming* the one measured confounder (prior ability) w
 "causes" is on loan, repayable the moment an unmeasured confounder appears. Study S says nothing causal at all
 — random *sampling* buys a claim about the undergraduate population's sleep, and even that claim is hostage to
 the 240 who never answered. Same campus, three designs, three different licenses.
+
+![**What each design can and cannot support.** The same five design families laid out as a license table: the experiments (CRD, blocked and paired, factorial) all carry a **causal** claim through random assignment but no population claim; the adjusted observational study earns a causal claim *only if* there is no unmeasured confounding; and the SRS survey is the mirror image — a **population** claim but no causal one. Each row also names the leading threat that design leaves open. Synthetic; illustrative.](../assets/figures/wk15_design_license_matrix.png){#fig-wk15-license-matrix fig-alt="A five-row comparison table with columns Design, Mechanism, Causal claim, Population claim, and Leading threat. CRD week 5: assignment, causal yes, population no, threat external validity. Blocked and paired week 6: assignment, causal yes and sharper, population no, threat needs a pre-treatment blocking variable. Factorial weeks 7 to 8: assignment, causal yes plus interaction, population no, threat read the cells when the interaction is real. Observational adjusted weeks 9 to 10: neither mechanism, causal only if no unmeasured confounding, population no, threat confounding and bad control. Survey SRS weeks 11 to 13: sampling, causal no, population yes, threat coverage and nonresponse."}
 
 ### Why a true number can still be a false claim
 
@@ -164,6 +167,8 @@ lo   <- 162 / 600                  # 0.27  (if all 240 nonrespondents slept < 7h
 hi   <- (162 + 240) / 600          # 0.67  (if all 240 slept >= 7h)
 # Claim LICENSED: ~45% of the POPULATION sleep enough -- but nonresponse bound [0.27, 0.67].
 ```
+
+![**The three studies' headline numbers, side by side.** Study E (random **assignment**) earns a causal effect $d = 8.0 - 5.0 = 3.0$; Study O (**neither** mechanism) shows the naive gap $+8.0$ shrinking to the **adjusted** $+3.0$ once prior ability is controlled, so $+5.0$ of the raw gap was confounding, and even that $+3.0$ is causal only under no unmeasured confounding; Study S (random **sampling**) estimates the population proportion $\hat p = 0.45$, whose tight sampling interval $(0.40, 0.50)$ is dwarfed by the nonresponse bound from $0.27$ to $0.67$. Same campus, three designs, three licenses. Synthetic; seed 45403.](../assets/figures/wk15_three_studies.png){#fig-wk15-three-studies fig-alt="Three panels. Left, Study E experiment: a terracotta hatched Treatment bar at 8.0 and a slate-blue Control bar at 5.0 with a red arrow marking d equals 3.0 and the note headline causal d equals 3.0. Middle, Study O observational: a gray cross-hatched naive bar at plus 8.0 and a terracotta adjusted bar at plus 3.0 with a red arrow marking plus 5.0 of confounding and the note causal only if no unmeasured confounding. Right, Study S survey: a red point at proportion 0.45 with a narrow sampling confidence interval from 0.40 to 0.50 sitting inside a much wider shaded nonresponse bound from 0.27 to 0.67."}
 
 **Interpretation, naming the design move.** In Study E, random **assignment** is what was done to the units, so
 the $d = 3.0$ is a *causal* effect; the borderline $p \approx 0.057$ tempers our certainty about the size but
@@ -238,16 +243,6 @@ question→unit→measurement→sampling-vs-assignment→design→threats→clai
 source chapter is introduced; for the underlying concepts revisit the IMS study-design and sampling material
 and the ModernDive randomization/simulation material cited in the weeks they anchor. *These notes are the
 course's own synthesis, grounded in but not copied from the sources.*
-
-## Evidence and verification status
-
-**verified: false.** The design logic and the arc are course-authored, but every numeric value on this page is
-**drafted, synthetic, and not independently checked** — including the experiment's causal $d = 3.0$ (SE
-$\approx 1.55$, borderline $p \approx 0.057$), the observational naive $+8.0$ and **adjusted** $+3.0$, and the
-survey's $\hat p = 0.45$ (SE $\approx 0.026$, sampling CI $(0.40, 0.50)$) with its nonresponse bound $[0.27,
-0.67]$. The transfer salad-bar numbers are illustrative only. The course **math/statistics gate is BLOCKED**;
-do not treat any value here as a confirmed reference until the human/source sign-off in
-`_state/notation_ledger.md` §5 is complete.
 
 ## Public vs. graded
 

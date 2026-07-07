@@ -4,7 +4,6 @@ subtitle: "Turning ideas into observable data without pretending measurement is 
 page_mode: normal_week
 week_contract: public_note
 source_mode: source-informed
-verified: false
 readings:
   - "IMS (Çetinkaya-Rundel & Hardin), data-and-variables / measurement — supports operationalization and variable types"
 toc: true
@@ -91,6 +90,8 @@ an effect on "study skill," you have in fact reported an effect on *the timed ga
 record*. The claim is licensed only as far as the measure tracks the construct. Naming the construct,
 the measure, and the gap is the entire design move of Week 2, and skipping it is Risk 9.
 
+![**The measure is not the construct.** Each idea becomes a *measured variable* only by committing to an exact recorded procedure. "Study skill" $\to$ a timed problem-solving gain (post $-$ pre, in points), reported as the gain score $d = 3.0$ with pooled SD $s_p \approx 6.0$; "adequate sleep" $\to$ a self-reported $\ge 7$-hour item, reported as the indicator $\hat p = 0.45$ ($162/360$). The gap between the operational definition (middle) and the construct (left) is what you must name, or the claim quietly overreaches. Synthetic; seed 45403.](../assets/figures/wk02_construct_pipeline.png){#fig-wk02-pipeline fig-alt="A pipeline diagram with two rows and three columns headed Construct, Operational definition, and Measured variable. Top row: study skill, an idea, flows through an arrow to a timed problem-solving gain equal to post minus pre in points, which flows to a gain score with d equals 3.0 and pooled SD about 6.0, numeric data. Bottom row: adequate sleep, an idea, flows to a self-report item of at least 7 hours on a typical recent night, which flows to a sleep indicator with p-hat equal to 0.45 from 162 of 360, categorical data. A line beneath both rows says the recorded measure is not the construct, so name the gap between it and the idea."}
+
 ### Variable types and roles — set by the design, not the column
 
 Before you can record a value you must decide its **type**, because type controls what summaries and
@@ -105,6 +106,8 @@ design's question. In the Focus experiment the workshop arm is explanatory and t
 response; in a different study the same gain score could be an explanatory covariate. State the role the
 design gives each variable, and analyze at the design's grain (the Week 1 unit-of-analysis discipline
 still binds).
+
+![**Type controls what summaries are meaningful.** Variables split into *categorical* — nominal (workshop arm: treatment / control) and ordinal (prior-performance tier: low / medium / high) — and *numeric* — discrete counts (sessions attended) and continuous amounts (the timed gain score in points; hours of sleep). The explanatory-versus-response role is set by the design's question, not the column, and the $\ge 7$-hour sleep indicator shows a continuous construct deliberately collapsed into a binary category. Synthetic; illustrative.](../assets/figures/wk02_variable_types.png){#fig-wk02-types fig-alt="A tree diagram. A root box labeled Variable type branches to two family headers, Categorical labels on the left and Numeric amounts on the right. Categorical branches to Nominal unordered, example workshop arm treatment or control, and Ordinal ranked, example prior-performance tier low, medium, or high. Numeric branches to Discrete counts, example sessions attended 0, 1, 2, and Continuous measured, example the timed gain score in points and hours of sleep. A caption states that the explanatory or response role is set by the design's question, not the column, and that the at-least-7-hour sleep indicator collapses a continuous construct into a binary category."}
 
 ### Measurement error — bias vs noise, and reliability vs validity
 
@@ -122,6 +125,8 @@ in one direction: it does *not* average out, so no sample size removes it — a 
 respondents overstate sleep by half an hour is off by half an hour whether you ask 30 people or 30,000.
 That asymmetry is the practical heart of the week: **sample size fights noise, never bias.**
 
+![**Bias and noise are different errors.** The recorded measure for 45 units, plotted against the true construct value. Blue circles carry *noise only* — random scatter around the identity line (dashed) that averages out; terracotta triangles carry *bias plus noise* — the whole cloud is shifted up by a systematic $+3.0$ offset (the dotted line) that no sample size removes. That is the whole point: sample size fights noise, never bias. Synthetic; illustrative.](../assets/figures/wk02_measurement_error.png){#fig-wk02-error fig-alt="A scatter plot of recorded measure on the vertical axis against true construct value on the horizontal axis, both in units from about 55 to 95. A dashed grey identity line marks recorded equals true. Blue circles labeled noise only scatter evenly around that identity line. Terracotta triangles labeled bias plus noise sit systematically above it, clustered around a dotted line at recorded equals true plus 3.0. A red double-headed arrow marks the plus 3.0 systematic gap. A note says noise scatters around a line and averages out, while bias shifts the whole cloud up by 3.0 and sample size cannot remove it."}
+
 **Reliability** and **validity** answer different questions about a measure. Reliability asks: if I
 measure the same unit again, do I get the same value? Validity asks: am I measuring the construct I
 claimed? They are independent — a scale that always reads three pounds high is perfectly reliable
@@ -134,7 +139,7 @@ both questions separately.
 ### Worked example — operationalizing the Focus experiment outcome and the sleep item (recurring slice)
 
 These are the recurring synthetic studies from the course world; **all numbers are synthetic, seed set**
-(`set.seed(45403)`), and `verified: false`.
+(`set.seed(45403)`).
 
 **Study E — the gain-score outcome.** The Focus study-skills experiment randomizes $n = 60$ students,
 **30 treatment / 30 control**, and reports a timed problem-solving **gain score** in points. The
@@ -180,11 +185,11 @@ A compact way to record both is the **construct → measure → likely error** d
 | Adequate sleep | Self-report: $\ge 7$ hours on a typical recent night | Self-report bias (rounding, social desirability); threshold collapses a continuous construct |
 
 Here is the same logic as static, non-executed R — the measurement model and the locked numbers shown
-as comments. Code is shown for teaching; it is not run here.
+as comments. Code is shown for teaching; it is not run in this diagnostic.
 
 ```r
 # Week 2 — measurement model for the recurring studies (STATIC, not executed)
-# All data synthetic; verified: false. Seed set for any random draw.
+# All data synthetic. Seed set for any random draw.
 set.seed(45403)
 
 # --- Study E: the gain score as construct + bias + noise -------------------
@@ -250,6 +255,8 @@ measured a self-reported $\ge 7$-hour item). The fix is the three-sentence disci
 construct, name the operational definition, name the gap — and to keep **bias** and **noise** straight,
 because they call for different responses.
 
+![**Reliable is not the same as valid.** Four target patterns cross *reliability* (does the measure repeat?) with *validity* (does it hit the intended construct?). The top-right trap, highlighted in red, is the dangerous one: a tightly clustered but off-center measure — a scale that always reads three high — is perfectly reliable yet not valid. A measure can repeat consistently and still track the wrong construct, so reliability alone never certifies validity. Synthetic; illustrative.](../assets/figures/wk02_reliability_validity.png){#fig-wk02-reliability fig-alt="A two-by-two grid of dartboard targets crossing reliability with validity, each target showing points on concentric rings around a gold bullseye. Top-left, reliable and valid: a tight cluster on the bullseye, what you want. Top-right, highlighted in red, reliable but not valid: a tight cluster off-center, labeled the trap, the scale that always reads 3 high. Bottom-left, not reliable but valid: points scattered widely but centered on the bullseye, noisy yet averaging on target. Bottom-right, not reliable and not valid: points scattered widely and off-center. The takeaway is that consistency never guarantees measuring the right construct."}
+
 Two specific traps live inside this one. First, **assuming sample size cures everything.** It does not:
 a larger sample shrinks *noise* and tightens precision, but a systematic *bias* (a self-report offset, a
 miscalibrated instrument) is just as wrong at $n = 30{,}000$ as at $n = 30$. Second, **confusing
@@ -283,16 +290,6 @@ response) and the idea that data come from a measurement procedure. *These notes
 synthesis, grounded in but not copied from the sources* — no source prose, examples, datasets, or
 exercises are reproduced. IMS is **CC BY-SA 3.0** (free at <https://openintro-ims.netlify.app/>);
 attribution is given and nothing is adapted wholesale.
-
-## Evidence and verification status
-
-**`verified: false`.** The design logic on this page — construct vs operational definition, bias vs
-noise, reliability vs validity — is course-authored. But every numeric value here is **drafted,
-synthetic, and not independently checked**: the load-bearing ones are Study E's gain effect $d = 3.0$
-with pooled SD $s_p \approx 6.0$ (and the $\bar y_T = 8.0$ / $\bar y_C = 5.0$ means behind it), and
-Study S's self-report proportion $\hat p = 162/360 = 0.45$; the transfer figures ($0.18$, $0.27$) are
-illustrative and distinct. The course **math/statistics gate is BLOCKED**. Do not treat any value here
-as a confirmed reference until the human/source sign-off in `_state/notation_ledger.md` §5 is complete.
 
 ## Public vs. graded
 

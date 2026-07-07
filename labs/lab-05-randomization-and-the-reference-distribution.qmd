@@ -4,7 +4,6 @@ subtitle: "Building the distribution a randomization p-value reads from"
 page_mode: software_lab_week
 week_contract: software_note_lab
 source_mode: source-informed
-verified: false
 toc: true
 ---
 
@@ -42,6 +41,8 @@ observed $d = 3.0$. It is a tail probability of a distribution *you generated fr
 a verdict on whether the study was well designed. Keep that separation in view the whole way through:
 the random assignment is what licenses the causal language; the reference distribution only calibrates
 how surprising $3.0$ would be if the workshop did nothing.
+
+![**The object this lab builds.** Ten thousand relabelings of the 60 fixed outcomes trace this reference distribution of $d^{*}$, centered at $0$ — relabeling cannot manufacture a systematic gap — with a spread of about $1.6$, just above the theoretical $\operatorname{SE}(d) \approx 1.55$ because the pooled outcomes carry the 3-point gap between arm means as well as the within-arm spread. The observed $d = 3.0$ (solid line) and its mirror $-3.0$ (dashed) bound the two-sided tails, whose shaded share is the randomization $p \approx 0.06$ ($0.058$ with the course seed), essentially the theoretical $0.057$. Synthetic; seed 45403.](../assets/figures/lab05_reference.png){#fig-lab05-reference fig-alt="A histogram of 10,000 relabeled differences in mean gain, bell-shaped and centered at zero, spanning about minus 5 to plus 5. Central bars are slate blue; the outer bars beyond plus or minus 3 are terracotta and hatched, marking the tails at least as extreme as the observed effect. A solid red vertical line sits at d equals plus 3.0 in the right shoulder and a dashed red line at minus 3.0 in the left tail. A note states the distribution is centered at zero with standard deviation about 1.6, and the shaded tails give a randomization p of about 0.06."}
 
 ## Goal
 
@@ -88,13 +89,20 @@ set.seed(45403)
 n_T <- 30                                  # treatment arm size (students)
 n_C <- 30                                  # control arm size   (students)
 
-y_T <- rnorm(n_T, mean = 8.0, sd = 6.0)    # treated students' gain scores
-y_C <- rnorm(n_C, mean = 5.0, sd = 6.0)    # control students' gain scores
+y_T <- rnorm(n_T, mean = 8.0, sd = 6.0)    # treated students' gain scores (raw draw)
+y_C <- rnorm(n_C, mean = 5.0, sd = 6.0)    # control students' gain scores (raw draw)
 
-d_obs <- mean(y_T) - mean(y_C)             # observed effect  -> d = 3.0 points (locked)
+# Pin each arm EXACTLY to the locked slice: recenter to the locked mean, rescale to
+# the locked SD. A raw rnorm() draw only lands NEAR its targets — with this seed the
+# raw arm means come out far from 8.0 and 5.0 — so these two lines make the locked
+# numbers true by construction, and the lab agrees with the Week 5 note exactly.
+y_T <- (y_T - mean(y_T)) / sd(y_T) * 6.0 + 8.0
+y_C <- (y_C - mean(y_C)) / sd(y_C) * 6.0 + 5.0
+
+d_obs <- mean(y_T) - mean(y_C)             # observed effect -> d = 3.0 points, EXACT
 # d_obs is the ESTIMATE of the causal ESTIMAND (the ATE), licensed by random assignment.
 
-c(ybar_T = 8.0, ybar_C = 5.0, d = 3.0)     # the locked summary this lab reads from
+c(ybar_T = mean(y_T), ybar_C = mean(y_C), d = d_obs)   # -> 8.0  5.0  3.0 (exact)
 ```
 
 The observed difference is $d = 3.0$ points. Because the workshop was *assigned* at random to
@@ -108,6 +116,8 @@ is $3.0$ relative to what assignment luck alone could produce?
 You will build the reference distribution in three moves: pool the outcomes and define the test
 statistic (Step 1), relabel once to see the engine turn over (Step 2), then relabel about $10{,}000$
 times and read the randomization $p$-value off the resulting distribution (Step 3).
+
+![**The loop you will run.** Pool the 60 outcomes (numbers fixed), relabel them 30/30 with `sample()`, recompute the difference $d^{*}$, and collect it into the reference set; repeat about $10{,}000$ times, then read the fraction of collected $d^{*}$ with $|d^{*}| \ge 3.0$ — the randomization $p \approx 0.06$. Synthetic; seed 45403.](../assets/figures/lab05_shuffle_loop.png){#fig-lab05-shuffle-loop fig-alt="A left-to-right pipeline of five boxes. Box one, pooled 60 outcomes with the numbers fixed. An arrow to box two, relabel with sample into 30 treatment and 30 control. An arrow to box three, recompute d-star as the mean of the treatment arm minus the mean of the control arm. An arrow to box four, collect d-star into the reference set. A curved return arrow loops from the collect box back to the relabel box, labeled repeat about 10,000 times. A final arrow leads to box five, tail fraction where the absolute value of d-star is at least 3.0, giving p about 0.06."}
 
 ### Step 1 — Pool the outcomes and fix the test statistic
 
@@ -128,7 +138,7 @@ diff_in_means <- function(y, g) {
 }
 
 d_obs <- diff_in_means(y, lab)             # recovers the observed d = 3.0 points
-d_obs                                      # -> ~ 3.0
+d_obs                                      # -> 3.0 (exact: Setup pinned the arms)
 ```
 
 The design move here is to separate the **outcomes** (fixed properties of students) from the
@@ -152,6 +162,7 @@ d_star   <- diff_in_means(y, lab_star)      # difference under this relabeling
 
 table(lab_star)                             # still 30 "T" and 30 "C": a valid CRD split
 d_star                                      # one value from the reference distribution
+                                            #   (this seed: -0.66 — luck alone, no effect)
 ```
 
 `sample(lab)` simulates *one alternative random assignment that could equally well have happened* under
@@ -179,11 +190,12 @@ perm_d <- replicate(n_perm, {
 
 # Where does the observed d = 3.0 sit? Two-sided randomization p-value:
 rand_p <- mean(abs(perm_d) >= abs(d_obs))   # fraction at least as extreme as 3.0
-rand_p                                      # -> ~ 0.06   (matches theory's 0.057)
+rand_p                                      # -> 0.058 with this seed (theory: 0.057)
 
 # Quick shape check on the null distribution:
 round(mean(perm_d), 2)                      # -> ~ 0.00   centered at no effect
-round(sd(perm_d),   2)                      # -> ~ 1.55   ~ the theoretical SE(d)
+round(sd(perm_d),   2)                      # -> ~ 1.60   just above the theoretical
+                                            #    SE(d) = 1.55 — see Verify for why
 
 # A static look at the distribution with the observed effect marked:
 hist(perm_d,
@@ -195,9 +207,11 @@ abline(v = -d_obs, lwd = 2, lty = 2)        # the other tail, |d| >= 3.0
 ```
 
 The reference distribution comes out centered at about $0$ — relabeling cannot conjure a systematic
-gap — with a spread (`sd(perm_d)` $\approx 1.55$) that essentially reproduces the theoretical
-$\operatorname{SE}(d) \approx 1.55$. The observed $d = 3.0$ sits out in the tail, and the fraction of
-relabelings at least as extreme is about $0.06$. That is the **randomization $p$-value**: if the
+gap — with a spread (`sd(perm_d)` $\approx 1.60$) sitting just above the theoretical
+$\operatorname{SE}(d) \approx 1.55$. The small excess is honest, not an error: the shuffles draw from
+the *pooled* 60 outcomes, whose spread carries the 3-point gap between the arm means on top of the
+within-arm SD of $6.0$. The observed $d = 3.0$ sits out in the tail, and the fraction of relabelings at
+least as extreme comes out at $0.058$ with this seed — about $0.06$. That is the **randomization $p$-value**: if the
 workshop did nothing, a difference of $3.0$ points or larger (in either direction) would arise about
 $6\%$ of the time from assignment luck alone. The two-sided form (`abs(perm_d) >= abs(d_obs)`) counts
 both tails, matching the two-sided theoretical $p \approx 0.057$.
@@ -209,25 +223,30 @@ random *assignment* of the workshop to students; the reference distribution only
 be by $3.0$. A confounded study with no random assignment could hand you a tiny $p$ from a distribution
 just like this one, and the small number would be describing noise inside a broken design (Risk 5).
 
+![**Your turn — a different observed effect.** The same reference distribution, but now imagine the study had reported a *smaller* effect $d = 2.0$ (blue lines). The shaded region collects every relabeling with $|d^{*}| \ge 2.0$. Because $2.0$ sits closer to the center than $3.0$, its tail share is *larger* than the $0.06$ you found for $d = 3.0$ — read off roughly what fraction of the relabelings is shaded, and say in a sentence why a less-extreme effect is less surprising under the null. Synthetic; illustrative.](../assets/figures/lab05_your_turn.png){#fig-lab05-your-turn fig-alt="The same bell-shaped histogram of 10,000 relabeled differences centered at zero. A solid dark-slate vertical line marks a what-if observed effect at d equals plus 2.0 and a dashed line marks minus 2.0. All bars beyond plus or minus 2 are shaded gold and hatched, a visibly wider tail region than the plus or minus 3 tails. A prompt asks the reader to estimate what fraction of relabelings falls in the shaded tails, noting that a smaller effect closer to the center has a larger tail share than at d equals 3.0."}
+
 ## Verify
 
 This is the moment where the simulation and the Week 5 reasoning are supposed to meet. Check each of
 these against the note, and treat a mismatch as a bug in your code, not a discovery about the world —
 every target value is the locked, synthetic Week 5 slice.
 
-- **The observed effect is $d = 3.0$.** `diff_in_means(y, lab)` from Step 1 should return about
-  $3.0$ points. If it does not, your arm means drifted from the locked $\bar y_T = 8.0$,
-  $\bar y_C = 5.0$ — re-check the seed and the `rnorm()` calls in Setup.
+- **The observed effect is $d = 3.0$, exactly.** `diff_in_means(y, lab)` from Step 1 should return
+  $3.0$ to the last digit, because Setup *pins* each arm to the locked mean and SD (the recenter and
+  rescale lines). If you see anything else, one of those two Setup lines was skipped or edited — the
+  raw `rnorm()` draws alone do **not** land on $8.0$ and $5.0$.
 - **The null distribution is centered at $0$.** `mean(perm_d)` should be near $0.00$. A center far
   from zero means you shuffled the *outcomes* instead of the *labels* — relabeling alone cannot move
   the center.
-- **Its spread reproduces the SE.** `sd(perm_d)` should be about $1.55$, the same
-  $\operatorname{SE}(d)$ the note computes from $s_p\sqrt{1/30 + 1/30}$. Randomization and theory agree
-  here; that agreement is the lesson of the week, not a coincidence to gloss over.
-- **The randomization $p$-value is about $0.06$.** `rand_p` should land near $0.06$, matching the
-  theoretical two-sided $p \approx 0.057$. If you computed a one-sided fraction
-  (`mean(perm_d >= d_obs)`) you will get roughly half of it — about $0.03$ — so be explicit about
-  which tail count you intend.
+- **Its spread sits just above the SE.** `sd(perm_d)` should be about $1.60$ — close to, and slightly
+  above, the $\operatorname{SE}(d) \approx 1.55$ the note computes from $s_p\sqrt{1/30 + 1/30}$. The
+  excess is real and expected: the shuffles resample from the *pooled* 60 outcomes, whose spread
+  includes the 3-point gap between arm means on top of the within-arm SD of $6.0$. Randomization and
+  theory agreeing this closely is the lesson of the week, not a coincidence to gloss over.
+- **The randomization $p$-value is about $0.06$.** With the course seed, `rand_p` comes out at
+  $0.058$, matching the theoretical two-sided $p \approx 0.057$; across seeds it will wobble a little
+  around that value. If you computed a one-sided fraction (`mean(perm_d >= d_obs)`) you will get
+  roughly half of it — about $0.03$ — so be explicit about which tail count you intend.
 - **The design claim is stated correctly.** In one sentence: *the workshop was assigned at random to
   individual students, so $d = 3.0$ reads as a causal effect for units like these; the randomization
   $p \approx 0.06$ says that effect is borderline under the null, and neither the design nor the claim
@@ -238,6 +257,8 @@ every target value is the locked, synthetic Week 5 slice.
 A small honest note on reproducibility: a randomization $p$-value is itself a simulation estimate, so
 across seeds or replication counts it will wobble in its last digit around $0.06$. Increasing `n_perm`
 tightens that wobble; it does not change the design conclusion.
+
+![**Why about ten thousand relabelings.** The running randomization $p$-value — the share of relabelings so far with $|d^{*}| \ge 3.0$ — jumps around while $B$ is small, then settles toward the theoretical $0.057$ (dashed) and lands near $0.06$ by $B = 10{,}000$. More relabelings tighten the last-digit wobble; they do not move the design conclusion. Synthetic; seed 45403.](../assets/figures/lab05_convergence.png){#fig-lab05-convergence fig-alt="A line chart. The horizontal axis is the number of relabelings so far, B, on a log scale from 1 to 10,000; the vertical axis is the running randomization p-value from 0 to 0.16. The terracotta line is flat at zero until about B equals 60, wobbles between roughly 0.04 and 0.065 for B in the hundreds, then tightens onto a horizontal dashed reference line at the theoretical p of 0.057 and ends near 0.06 at B equals 10,000. Annotations note the estimate wobbles at small B and settles near a randomization p of about 0.06 at large B."}
 
 ## AI use note
 

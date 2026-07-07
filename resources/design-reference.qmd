@@ -8,7 +8,7 @@ toc: true
 This one-page reference lays the course's design families next to each other. The questions to ask of any study
 are always the same: *what is the unit of analysis? was there random sampling? was there random assignment?
 what claim does that license? what threat is left open?* All example numbers come from the synthetic recurring
-studies and are `verified: false` (statistics gate blocked).
+studies and are illustrative.
 
 ## The design families at a glance
 

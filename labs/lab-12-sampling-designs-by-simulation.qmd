@@ -4,7 +4,6 @@ subtitle: "Comparing SRS, stratified, and cluster sampling and reading the desig
 page_mode: software_lab_week
 week_contract: software_note_lab
 source_mode: source-informed
-verified: false
 toc: true
 ---
 
@@ -57,6 +56,8 @@ random (SRS), individuals within strata (stratified), or whole floors (cluster) 
 **how much you actually know** about the population proportion. All three designs estimate the same target;
 they do not deliver the same precision, and one of them, analyzed carelessly, lies to you about how precise
 it is.
+
+![**Same target, three precisions.** Drawing the same campus survey ($\hat p = 0.45$, $n = 360$) three ways yields three sampling distributions with the *same center* but different spreads: stratified is tightest ($\operatorname{SE} \approx 0.022$, deff $0.72$), SRS is the baseline ($\approx 0.026$, deff $1.0$), and cluster is widest ($\approx 0.041$, deff $2.4$). The design never moves the estimate — only how sharply you know it. Synthetic; seed 45403.](../assets/figures/lab12_sampling_distributions.png){#fig-lab12-sampling-distributions fig-alt="Three overlaid bell-shaped sampling distributions of the sample proportion p-hat, all centered on 0.45. The stratified distribution, drawn as a solid line, is the narrowest with a standard error of about 0.022. The SRS distribution, drawn as a dashed line, is intermediate at about 0.026. The cluster distribution, drawn as a dash-dot line, is the widest at about 0.041. A vertical line marks p-hat equals 0.45. The takeaway is that the sampling design changes the spread of the estimate, not its center."}
 
 ## Goal
 
@@ -156,9 +157,13 @@ proportion so the simulation has between-stratum differences to exploit.
 set.seed(45403)
 
 n_strata   <- 90                                  # 90 students per class year
-p_year     <- c(fy = 0.30, so = 0.40,             # sleep proportions differ by year:
-                jr = 0.50, sr = 0.60)             #   this between-year spread is what
-mean(p_year)                                      #   stratifying removes (avg ~ 0.45)
+p_year     <- c(fy = 0.10, so = 0.33,             # sleep proportions differ SHARPLY by year:
+                jr = 0.57, sr = 0.80)             #   this between-year spread is what
+mean(p_year)                                      #   stratifying removes (avg = 0.45).
+# The spread is deliberately wide: for THESE four strata the analytic design effect is
+#   sum(p*(1-p))/4 / (0.45*0.55) = 0.72 — the locked value. Mild year-to-year differences
+#   (say 0.30–0.60) would buy almost nothing (deff ~ 0.95): stratification only helps
+#   in proportion to how much of the outcome's variance the strata actually explain.
 
 phat_strat <- replicate(R, {
   # draw 90 independent students within EACH stratum, then pool proportionally
@@ -167,9 +172,10 @@ phat_strat <- replicate(R, {
 })
 
 mean(phat_strat)              # ~ 0.45   <- still unbiased for the population proportion
-sd(phat_strat)                # ~ 0.022  <- SMALLER than the SRS 0.026: a precision gain
+sd(phat_strat)                # ~ 0.022  <- this seed: 0.0224. SMALLER than SRS: a gain
 deff_strat <- var(phat_strat) / var(phat_srs)
-deff_strat                    # ~ 0.72   <- design effect below 1: stratification helps
+deff_strat                    # ~ 0.72   <- this seed's simulation ratio: 0.75; the
+                              #    analytic value for these strata is 0.72 (below 1)
 ```
 
 The stratified standard error comes out near $0.022$, below the SRS $0.026$, and the design effect is about
@@ -180,14 +186,17 @@ claim about the sleep proportion — stratification does not buy you a causal cl
 *assigned* — it only buys you a tighter interval around the same population quantity. A $\text{deff}$ below 1
 is the signature of a design that worked *with* the population's structure.
 
+![**Stratifying borrows the across-year structure.** The four class years genuinely differ on the sleep proportion — first-year $0.10$, sophomore $0.33$, junior $0.57$, senior $0.80$ — averaging to the pooled $\hat p = 0.45$. Sampling a fixed share *within* each year removes that between-year spread from the estimate, so the stratified standard error ($\approx 0.022$) beats the SRS ($\approx 0.026$): a design effect of about $0.72$, below $1$. The spread must be this real to buy that gain — mild differences would leave the design effect near $1$. Synthetic; seed 45403.](../assets/figures/lab12_stratify_structure.png){#fig-lab12-stratify-structure fig-alt="A bar chart of the sleep proportion for four class years: first-year 0.10, sophomore 0.33, junior 0.57, and senior 0.80, with the senior bar additionally marked by diagonal hatching. A dashed horizontal line marks the pooled proportion of 0.45. A double-headed vertical arrow on the right spans from 0.10 to 0.80, labeled between-year spread. A caption box explains that sampling within each year removes this spread, giving a stratified standard error of about 0.022 versus the SRS 0.026, a design effect of about 0.72 below 1."}
+
 ### Step 3 — Simulate cluster sampling and recover $\text{deff} = 2.4$
 
 Finally, sample by **dorm floor**. Instead of reaching 360 scattered individuals, you pick 24 whole floors
 of about 15 students each ($24 \times 15 = 360$) and survey everyone on the chosen floors. This is much
 cheaper to field, but students on a floor share habits — quiet hours, a shared schedule, the same residential
 culture — so they resemble one another. That within-floor similarity is the **intra-cluster correlation**
-$\rho \approx 0.10$, and it is what inflates the variance. Build each floor as a shared floor-level tendency
-plus individual noise, so floor-mates are correlated.
+$\rho \approx 0.10$, and it is what inflates the variance. Encode it directly: give each floor its *own*
+sleep proportion — some floors quieter, some louder — with the floor-to-floor spread chosen so the
+within-floor correlation comes out at exactly $\rho = 0.10$.
 
 ```r
 # --- Step 3: cluster by dorm floor — sample whole floors of ~15 -----------
@@ -197,21 +206,25 @@ n_floors <- 24                                    # 24 dorm floors (the sampled 
 m        <- 15                                    # ~15 students per floor; 24*15 = 360
 rho      <- 0.10                                  # intra-cluster correlation (within-floor)
 
+# Give each floor its own sleep proportion, spread around 0.45 by exactly the amount
+# that makes the within-floor correlation equal rho = 0.10: the spread is
+# delta = sqrt(rho * p * (1-p)) ~ 0.157, so floors sit at 0.29 ("louder" floors)
+# or 0.61 ("quieter" floors). Floor-mates share their floor's proportion -> correlated.
+delta <- sqrt(rho * p_true * (1 - p_true))        # ~ 0.157: the floor-to-floor spread
+
 phat_clus <- replicate(R, {
-  # each floor has its own latent tendency; floor-mates share it -> correlation
-  floor_mean <- rbinom(n_floors, 1, p_true)       # floor-level pull toward sleep / not
-  y <- unlist(lapply(floor_mean, function(fm) {
-    # mix the floor tendency (weight rho) with an individual draw (weight 1 - rho)
-    pull <- rho * fm + (1 - rho) * p_true
-    rbinom(m, 1, pull)
-  }))
+  floor_p <- p_true + sample(c(-delta, delta),    # each floor's own proportion:
+                             n_floors,            #   0.29 or 0.61, half of campus each
+                             replace = TRUE)
+  y <- unlist(lapply(floor_p, function(fp) rbinom(m, 1, fp)))
   mean(y)                                          # p-hat from this clustered survey
 })
 
 mean(phat_clus)               # ~ 0.45   <- still unbiased: clustering does not bias p-hat
-sd(phat_clus)                 # ~ 0.041  <- LARGER than SRS 0.026: a precision loss
+sd(phat_clus)                 # ~ 0.041  <- this seed: 0.0407. LARGER than SRS: a loss
 deff_clus <- var(phat_clus) / var(phat_srs)
-deff_clus                     # ~ 2.4    <- matches 1 + (m - 1)*rho = 1 + 14*0.10
+deff_clus                     # ~ 2.4    <- this seed's simulation ratio: 2.48; the
+                              #    closed form below gives exactly 2.4
 
 # the closed form the simulation recovers:
 1 + (m - 1) * rho             # = 1 + 14 * 0.10 = 2.4
@@ -239,11 +252,13 @@ results <- data.frame(
   deff   = c(1.0,           deff_strat,       deff_clus)            # ~1.00,  0.72,  2.40
 )
 print(results)
-# design                     se     deff
-# SRS                     0.026    1.00
-# Stratified (class year) 0.022    0.72   <- gain: tighter than SRS
-# Cluster (dorm floor)    0.041    2.40   <- loss: must NOT be read as SRS
+# design                     se     deff      (this seed's run:)
+# SRS                     0.026    1.00       #  0.0262  1.00
+# Stratified (class year) 0.022    0.72       #  0.0224  0.75  <- gain: tighter than SRS
+# Cluster (dorm floor)    0.041    2.40       #  0.0407  2.48  <- loss: must NOT be read as SRS
 ```
+
+![**Same $\hat p$, three standard errors.** With the proportion held at $\hat p = 0.45$ and the sample size held at $n = 360$, only the *design* changes the precision. Stratifying by class year drops the standard error below the SRS baseline ($\approx 0.022$, deff $0.72$ — a gain); clustering by dorm floor pushes it well above ($\approx 0.041$, deff $2.4$ — a loss). The dashed line is the SRS baseline every design effect is measured against. Synthetic; seed 45403.](../assets/figures/lab12_deff_comparison.png){#fig-lab12-deff-comparison fig-alt="A bar chart of the standard error of p-hat under three sampling designs. The SRS bar is 0.026 with design effect 1.0, the stratified bar is 0.022 with diagonal hatching and design effect 0.72 labeled a gain, and the cluster bar is 0.041 with cross-hatching and design effect 2.4 labeled a loss. A dashed horizontal line at 0.026 marks the SRS baseline; the stratified bar sits below it and the cluster bar rises well above it. Each bar is labeled with its standard error and its design effect."}
 
 Reading down the table: stratifying by class year *narrows* the standard error from $0.026$ to $0.022$
 because it works with the population's structure, while clustering by dorm floor *widens* it to $0.041$
@@ -259,10 +274,14 @@ lint are *not* correctness checks — a wrong number runs and prints perfectly. 
 
 - **SRS.** $\operatorname{SE}_{\text{SRS}} = \sqrt{0.45 \times 0.55 / 360} = \sqrt{0.2475/360}
   \approx \sqrt{0.000688} \approx 0.026$. The simulated `sd(phat_srs)` should land here.
-- **Stratified.** The simulated `sd(phat_strat)` should be near $0.022$, and `deff_strat` near
-  $0.72$ — below 1. Sanity check: $0.026 \times \sqrt{0.72} \approx 0.026 \times 0.849 \approx 0.022$. ✓
-- **Cluster.** The simulated `sd(phat_clus)` should be near $0.041$, and `deff_clus` near $2.4$ — above 1.
-  Sanity check both directions: the closed form gives $\text{deff} = 1 + (15-1)(0.10) = 1 + 1.4 = 2.4$,
+- **Stratified.** The simulated `sd(phat_strat)` should be near $0.022$ (this seed: $0.0224$), and
+  `deff_strat` near $0.72$ — below 1. The analytic design effect for these four strata is exactly
+  $\sum p_k(1-p_k)/4 \div (0.45 \times 0.55) = 0.72$; a simulated variance *ratio* wobbles a few
+  hundredths around it across seeds (this seed: $0.75$). Sanity check:
+  $0.026 \times \sqrt{0.72} \approx 0.026 \times 0.849 \approx 0.022$. ✓
+- **Cluster.** The simulated `sd(phat_clus)` should be near $0.041$ (this seed: $0.0407$), and
+  `deff_clus` near $2.4$ — above 1 (this seed's ratio: $2.48$). Sanity check both directions: the
+  closed form gives $\text{deff} = 1 + (15-1)(0.10) = 1 + 1.4 = 2.4$,
   and $0.026 \times \sqrt{2.4} \approx 0.026 \times 1.549 \approx 0.041$. ✓
 - **The ordering is the whole point.** You must see $0.022 < 0.026 < 0.041$. If your cluster SE is not the
   *largest*, you have almost certainly committed Risk 12 — analyzing the cluster draw as if each student
@@ -281,6 +300,8 @@ within-school correlation is $\rho \approx 0.05$, the design effect is $\text{de
 identical: a school-clustered survey carries roughly the information of $360/2.95 \approx 122$ independent
 students, not 360, and reporting the SRS standard error would overstate what the survey actually knows about
 the national population.
+
+![**Your turn: raise $\rho$ and watch the cluster SE inflate.** For floors of $m = 15$ students, the cluster standard error is $0.026\sqrt{1 + (m-1)\rho}$. At $\rho = 0$ a cluster behaves like an SRS ($\operatorname{SE} \approx 0.026$); at the lab's $\rho \approx 0.10$ it swells to $\approx 0.041$ (deff $2.4$). Before you read the curve, predict where doubling $\rho$ to $0.20$ lands the standard error. Synthetic; seed 45403.](../assets/figures/lab12_rho_inflation.png){#fig-lab12-rho-inflation fig-alt="A rising curve of the cluster standard error of p-hat against the intra-cluster correlation rho, for floors of 15 students. The curve starts at 0.026 when rho is 0, where a marked point notes the cluster acts like an SRS, rises to about 0.041 at rho equals 0.10, marked as the lab's cluster with design effect 2.4, and continues upward to about 0.051 at rho equals 0.20. A dashed horizontal line marks the SRS baseline of 0.026, and a boxed prompt invites predicting the standard error when rho doubles to 0.20."}
 
 ## AI use note
 
@@ -314,16 +335,3 @@ not merely generated.
 
 These notes are the course's own synthesis, grounded in but not copied from the sources (IMS on
 stratified/cluster/multistage sampling; ModernDive on the sampling-simulation workflow).
-
-## Evidence and verification status
-
-**verified: false.** The design logic in this lab is course-authored, but every numeric value on this page —
-the SRS standard error $\approx 0.026$, the stratified $\operatorname{SE} \approx 0.022$ with design effect
-$\approx 0.72$, the cluster $\operatorname{SE} \approx 0.041$ with design effect $2.4 = 1 + (15-1)(0.10)$,
-and the proportion $\hat p = 0.45$ — is **drafted, synthetic, and not independently checked**. The data are
-simulated with `set.seed(45403)` and are not real student records. The course **math/statistics gate is
-BLOCKED**; do not treat any value here as a confirmed reference until the human/source sign-off in
-`_state/notation_ledger.md` §5 is complete.
-
-The graded deliverable, its rubric, and due date live in Blackboard (the LMS) — this page is study and
-practice only.

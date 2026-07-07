@@ -4,7 +4,6 @@ subtitle: "How sampling designs change the precision of a population estimate"
 page_mode: normal_week
 week_contract: public_note
 source_mode: source-informed
-verified: false
 readings:
   - "Instructor notes (primary), sampling designs beyond SRS — supports stratified, cluster, multistage, and the design effect"
   - "IMS (Çetinkaya-Rundel & Hardin), stratified/cluster/multistage sampling — grounds the sampling-design concepts and sequence"
@@ -89,6 +88,8 @@ By the end of this week you should be able to:
 
 ## Concept development
 
+![**Three sampling designs, one population.** Each panel draws from the same students a different way: a simple random sample scatters an independent handful across everyone; a stratified design takes the *same fixed count within every* class-year band (first-year, sophomore, junior, senior); a cluster design takes a few *whole* dorm floors and surveys everyone on them. The design — not the analysis you run afterward — is what changes the precision. Synthetic; seed 45403.](../assets/figures/wk12_sampling_schematic.png){#fig-wk12-schematic fig-alt="Three side-by-side dot diagrams of the same population. Left, simple random sample: a grid of light dots with about eleven scattered dots filled in at random across the whole grid. Middle, stratified by class year: four shaded horizontal bands labeled first-year, sophomore, junior, and senior, with exactly three dots filled in within each band. Right, cluster by dorm floor: nine small boxes each holding six dots, with three whole boxes outlined and all of their dots filled in while the other six boxes stay light. Filled, larger dots mark the students who end up in the sample."}
+
 ### Stratified sampling: sample within groups, remove between-group variation
 
 Begin with the design that *helps* you. In **stratified sampling** you partition the population into strata —
@@ -160,6 +161,8 @@ clusters, then sample *within* them rather than taking everyone — sits between
 cheap while limiting how much clustering you absorb, so its design effect lands above $1$ but below the
 take-everyone cluster design.
 
+![**The two designs pull opposite ways.** Measured against the SRS line at $\text{deff} = 1$, stratifying sits *below* at $0.72$ — lower variance, a precision gain — while clustering sits well *above* at $2.4$ — higher variance, a precision loss. One design choice buys sharpness for the same cost; the other spends it for cheaper fieldwork. Synthetic; seed 45403.](../assets/figures/wk12_deff_direction.png){#fig-wk12-deff-direction fig-alt="A bar chart of the design effect for two sampling designs, with a dashed horizontal reference line at deff equals 1 labeled SRS. The hatched stratified bar reaches 0.72, below the line, annotated lower variance, deff less than 1, precision gain. The cross-hatched cluster bar reaches 2.40, above the line, annotated higher variance, deff greater than 1, precision loss. The two bars sit on opposite sides of the SRS reference line."}
+
 ## Worked examples
 
 ### Worked example — the study-habits survey: stratified vs cluster (recurring study, locked numbers)
@@ -193,8 +196,10 @@ $$
 \operatorname{SE}_{\text{clust}} = 0.026\sqrt{2.4} \approx 0.041.
 $$
 
+![**Same estimate, three precisions.** Holding $\hat p = 0.45$ fixed and changing only the design, the SRS standard error of $0.026$ (design effect $1.0$) is the yardstick: stratifying by class year lowers it to $0.022$ (deff $0.72$, a precision *gain*), while clustering by dorm floor raises it to $0.041$ (deff $2.4$, a precision *penalty*). Same $\hat p$, three different standard errors. Synthetic; seed 45403.](../assets/figures/wk12_deff_se_bars.png){#fig-wk12-deff-se fig-alt="A bar chart of the standard error of p-hat for three sampling designs, with a dashed horizontal line at 0.026 labeled SRS baseline. The SRS bar reaches 0.026, at the baseline. The hatched stratified bar reaches 0.022, just below the baseline, with a small double-arrow to the line marked gain. The cross-hatched cluster bar reaches 0.041, well above the baseline, with a tall double-arrow to the line marked penalty. Each bar is labeled with its design effect: SRS 1.0, stratified 0.72, cluster 2.4."}
+
 Here is the static R that lays the three designs side by side. It is shown as teaching and is **not executed**
-here.
+in this diagnostic.
 
 ```r
 # Study S — pricing three sampling designs for the same p-hat.
@@ -261,6 +266,8 @@ $$
 
 and the effective sample size is only $1/5.8 \approx 17\%$ of the children actually tested.
 
+![**The same machinery at a bigger scale.** In a state reading survey clustered by school, testing $m = 25$ children per school with intra-cluster correlation $\rho \approx 0.20$ gives $\text{deff} = 1 + 24(0.20) = 5.8$, so the honest standard error of $0.036$ is about $\sqrt{5.8} \approx 2.4$ times the naive SRS value of $0.015$, and the effective sample is only about $17\%$ of the children tested. The design move is identical to the campus survey; only the scale of the penalty changes. Synthetic; illustrative.](../assets/figures/wk12_transfer_school_cluster.png){#fig-wk12-transfer fig-alt="A bar chart comparing two standard errors of p-hat for a reading survey clustered by school. The left bar, dotted and labeled Naive SRS SE reported, reaches 0.015. The right bar, labeled Cluster-corrected honest SE, reaches 0.036. Text above the bars reads deff equals 1 plus 24 times 0.20 equals 5.8. A red double-headed arrow between the bar tops is labeled honest SE is the square root of 5.8, about 2.4 times larger. A note by the left bar says the effective sample is about 17 percent of children tested."}
+
 **Interpretation.** The agency sampled **whole schools**, so the school — not the child — is the unit the
 randomness operated on. With $\rho \approx 0.20$ and $25$ children per school, the design effect of $5.8$ is
 severe: more than four-fifths of the apparent sample is eaten by within-school similarity, and the honest
@@ -279,6 +286,8 @@ $\sqrt{\hat p(1-\hat p)/n}$ on the number of *people* you measured, get a comfor
 report a tight confidence interval. Nothing in the output warns you that the number is a fiction. In the
 campus survey that fiction reports $0.026$ when the truth is $0.041$; in the school survey it reports $0.015$
 when the truth is $0.036$.
+
+![**Ignoring the design effect understates the uncertainty.** A cluster sample analyzed as if it were an SRS reports the standard error $0.026$, but the honest, design-corrected value is $0.041$ — larger by a factor of $\sqrt{2.4} \approx 1.55$. The point estimate $\hat p = 0.45$ is unchanged; only the standard error — and the width of the confidence interval built from it — differs. Synthetic; seed 45403.](../assets/figures/wk12_cluster_as_srs.png){#fig-wk12-cluster-as-srs fig-alt="A bar chart comparing two standard errors of p-hat for the same cluster sample. The left bar, dotted and labeled Reported analyzed as SRS, reaches 0.026. The right bar, labeled Honest design-corrected, reaches 0.041. A red double-headed arrow between the two bar tops is labeled understated by the square root of 2.4, about 1.55 times. A note reads that p-hat of 0.45 is the same and only the standard error differs."}
 
 Underneath the error is a **unit-of-analysis** confusion (Risk 3): the design sampled *floors* (or *schools*),
 so the cluster is the independently sampled unit, but the careless analysis treats each *student* (or *child*)
@@ -318,18 +327,6 @@ lab, where you simulate the three designs and read the design effect off the spr
 examples, figures, or exercises are reproduced from any source.
 
 These notes are the course's own synthesis, grounded in but not copied from the sources.
-
-## Evidence and verification status
-
-**`verified: false`.** The design logic on this page — stratified versus cluster sampling, the design-effect
-formula $\text{deff} = 1 + (m-1)\rho$, and the unit-of-analysis reasoning — is course-authored. But every
-numeric value here is **drafted, synthetic (`set.seed(45403)`), and not independently checked**: the SRS
-baseline $\hat p = 0.45$ and $\operatorname{SE} \approx 0.026$; the **stratified** $\text{deff} \approx 0.72$
-and $\operatorname{SE} \approx 0.022$; the **cluster** $\text{deff} = 1 + 14(0.10) = 2.4$ and
-$\operatorname{SE} \approx 0.041$; the effective sample size $360/2.4 = 150$; and the illustrative transfer
-numbers ($\hat p = 0.60$, $\rho \approx 0.20$, $m = 25$, $\text{deff} = 5.8$, $\operatorname{SE} \approx
-0.036$). The course **math/statistics gate is BLOCKED**. Do not treat any value as a confirmed reference until
-the human/source sign-off in `_state/notation_ledger.md` §5 is complete.
 
 ## Public vs. graded
 

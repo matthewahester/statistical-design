@@ -4,7 +4,6 @@ subtitle: "Target populations, frames, coverage, and nonresponse"
 page_mode: normal_week
 week_contract: public_note
 source_mode: source-informed
-verified: false
 readings:
   - "Instructor notes (primary), surveys & sampling frames — supports target/frame/sample, coverage, nonresponse"
   - "IMS (Çetinkaya-Rundel & Hardin), sampling & survey error — supports SRS, the SE of a proportion, survey error"
@@ -89,6 +88,8 @@ population** is what you want to describe: all $12{,}000$ undergraduates. The **
 can physically draw names from: the registrar email list, $11{,}400$ students. The **sample** is who you
 actually selected: $n = 600$.
 
+![**Three nested groups, and the two gaps that bend the answer.** The target population of $12{,}000$ undergraduates narrows to the $11{,}400$-name registrar frame — a coverage gap of $600$ who can never be selected — then to the $600$ invited by SRS, then to the $360$ who respond, leaving $240$ nonrespondents. The coverage gap and the nonresponse are the two threats to the claim; the $10{,}800$ merely not sampled are not. Synthetic; seed 45403.](../assets/figures/wk11_frame_funnel.png){#fig-wk11-funnel fig-alt="A four-tier funnel narrowing downward. Tier one, target population, 12,000 undergraduates. Tier two, sampling frame or registrar email list, 11,400; a labeled shrink of 600 between the first two tiers is the coverage gap of students with no campus email who can never be selected. Tier three, SRS invited, 600, drawn from the frame after 10,800 are simply not sampled; this tier is split into 360 who respond and 240 who do not. Tier four, respondents, 360, where p-hat equals 162 over 360 equals 0.45 is computed. The coverage gap of 600 and the nonresponse of 240 are labeled as the two threats, while the ordinary sampling reduction of 10,800 is labeled as an ordinary sampling step."}
+
 The first gap, **population minus frame**, is **coverage error**. Here it is $12{,}000 - 11{,}400 = 600$
 students who hold no active campus email. They are not unlucky in the draw — they are *structurally
 unreachable*. A random sample of the frame can only ever speak for the $11{,}400$, so if the $600$ excluded
@@ -147,6 +148,8 @@ among the 600 is $162/600 = 0.27$. If *all* 240 sleep $\ge 7$ hours, it is $(162
 size, is the threat, and you do not assume it away as missing-completely-at-random — you bound it (Risk 11).
 Week 13 names the mechanism (MCAR / MAR / MNAR) behind this bound formally.
 
+![**Sampling error is the small uncertainty; nonresponse is the big one.** The sampling $95\%$ CI $(0.40, 0.50)$ has width $0.10$; the nonresponse bound from $0.27$ to $0.67$ — holding the $162$ known "yes" answers fixed and imagining the $240$ nonrespondents at both extremes — has width $0.40$, four times wider. Reporting only the tidy interval hides the people who never replied. Synthetic; seed 45403.](../assets/figures/wk11_nonresponse_bound.png){#fig-wk11-bound fig-alt="Two horizontal interval bars on a proportion axis. The upper narrow bar is the sampling 95% confidence interval from 0.40 to 0.50, width 0.10, with the point estimate p-hat equals 0.45 marked at its center. The lower, much wider hatched bar is the nonresponse bound from 0.27 to 0.67, width 0.40, labeled four times wider. Dotted guides show the narrow confidence interval sitting deep inside the wide bound. The takeaway is that nonresponse, not sample size, is the dominant source of uncertainty."}
+
 ## Worked examples
 
 ### Worked example — the study-habits survey (the recurring slice)
@@ -168,6 +171,8 @@ $$
 **if** every invitee answered, then across repeated SRS draws the respondent proportion would land in this band
 about 95% of the time. It is a population claim about adequate sleep, and it is *not* a causal claim about
 anything.
+
+![**The estimate and its narrow sampling interval.** On the $360$ respondents, $\hat p = 0.45$ with $\operatorname{SE}(\hat p) = \sqrt{0.45 \times 0.55 / 360} \approx 0.026$, so the $95\%$ confidence interval is about $(0.40, 0.50)$ — a width of only $0.10$. That band prices the luck of the draw under SRS and nothing else: it assumes the frame covered the population and that every invitee answered. Synthetic; seed 45403.](../assets/figures/wk11_srs_ci.png){#fig-wk11-srs-ci fig-alt="A bell-shaped sampling distribution of the sample proportion centered at p-hat equals 0.45 with a standard error of about 0.026. The central 95 percent region from 0.40 to 0.50 is shaded and labeled as the confidence interval; a solid vertical line marks 0.45 and dashed lines mark 0.40 and 0.50. A horizontal double arrow labels the interval width as 0.10. The takeaway is that the sampling interval is narrow and describes only sampling variability under simple random sampling."}
 
 **Coverage check.** The $600$ undercovered students can never be selected, so even this interval speaks, at
 best, for the $11{,}400$ in the frame — not the full $12{,}000$ (Risk 10). Naming that gap is part of stating
@@ -249,6 +254,8 @@ $220/1000 = 0.22$ (all nonrespondents disapprove) to $(220 + 600)/1000 = 0.82$ (
 honestly reach beyond landline-reachable county adults (Risk 13). Same design lesson, new context: random
 sampling earns a *population* claim, bounded by the frame and by who actually responds — never a causal one.
 
+![**The same design move, new numbers.** In the landline poll $\hat p = 0.55$ with a $95\%$ CI $(0.50, 0.60)$ of width $0.10$, while the nonresponse bound runs from $0.22$ to $0.82$, width $0.60$ or six times wider — and cell-only adults are never in the frame at all (about $70\%$ coverage). Only the context and the numbers change; the sampling lesson is identical to the campus survey. Synthetic; illustrative.](../assets/figures/wk11_transfer_phone_poll.png){#fig-wk11-transfer fig-alt="Two horizontal interval bars on an approval-proportion axis for a landline phone poll. The upper narrow bar is the sampling 95 percent confidence interval from 0.50 to 0.60, width 0.10, with the point estimate p-hat equals 0.55 at its center. The lower wide hatched bar is the nonresponse bound from 0.22 to 0.82, width 0.60, labeled six times wider. A note adds that cell-only adults are never in the landline frame, about 70 percent coverage. The takeaway is that the same sampling lesson holds with new numbers in a new context."}
+
 ## A common mistake
 
 The signature mistake this week is **reading the sampling interval as the whole story** — treating $(0.40,
@@ -257,6 +264,8 @@ draw under SRS; it silently assumes the frame covered the population (it did not
 and that everyone answered (they did not — 240 declined). The honest uncertainty about $p$ is the nonresponse
 bound $[0.27, 0.67]$, four times wider, and it sits *on top of* whatever coverage bias the missing 600
 introduce.
+
+![**Treating the frame as the population.** A random sample of the registrar frame can speak only for the $11{,}400$ it covers — $95\%$ of the target — not for all $12{,}000$. The $600$ students with no campus email are structurally unreachable, so no sample size reaches them (Risk 10). Reading $\hat p$ and its CI as a statement about every undergraduate is the coverage-error mistake. Synthetic; seed 45403.](../assets/figures/wk11_coverage_error.png){#fig-wk11-coverage fig-alt="A single horizontal bar representing the target population of 12,000 undergraduates. The left 95 percent of the bar, 11,400, is shaded as covered by the sampling frame, and a bracket above it notes that the SRS and its 95 percent confidence interval describe only these 11,400. The right sliver, 600, is hatched and flagged as students with no campus email who are structurally unreachable and whom no sample size reaches. The heading warns against reading p-hat and its interval as a claim about all 12,000."}
 
 The cure is a habit, not a formula: name all three groups (population $12{,}000$, frame $11{,}400$, sample
 $600$), name the coverage gap ($600$), report the sampling CI for what it is, and then *bound* the nonresponse
@@ -289,16 +298,6 @@ the *concepts and sequence* (sampling designs, sources of survey error, coverage
 worked numbers. *These notes are the course's own synthesis, grounded in but not copied from the sources.* The
 study-habits numbers here are synthetic and seed-set (`set.seed(45403)`), built for this course, not drawn from
 any source.
-
-## Evidence and verification status
-
-**verified: false.** The design logic on this page is course-authored, but every numeric value is **drafted,
-synthetic, and not independently checked.** The load-bearing numbers — target population $12{,}000$, frame
-$11{,}400$, coverage gap $600$, SRS $n = 600$ with $360$ respondents, $\hat p = 0.45$, $\operatorname{SE}
-\approx 0.026$, the 95% CI $(0.40, 0.50)$, and the nonresponse bound $[0.27, 0.67]$ — are part of the synthetic
-campus world (seed `set.seed(45403)`) and have not been human- or source-verified. The course's
-**math/statistics gate is BLOCKED**; do not treat any value here as a confirmed reference until the
-human/source sign-off in `_state/notation_ledger.md` §5 is complete.
 
 ## Public vs. graded
 

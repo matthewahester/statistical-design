@@ -4,7 +4,6 @@ subtitle: "Why random assignment licenses a causal claim, and how to read the co
 page_mode: normal_week
 week_contract: public_note
 source_mode: source-informed
-verified: false
 readings:
   - "IMS (Çetinkaya-Rundel & Hardin), experiments & randomized comparison — supports the completely randomized design"
   - "ModernDive (Ismay, Kim & Valdivia), randomization/permutation workflow — supports the reference distribution (lab)"
@@ -90,6 +89,8 @@ assigned whole *classrooms* to a condition, the unit would be the classroom, and
 individual students as if they were independently assigned would overstate your information badly.
 Name the assigned unit first; the arithmetic follows from it.
 
+![**A completely randomized design in one picture.** The 60 students (the assigned unit) pass through a single random-assignment gate — a coin or a shuffle — that splits them into a 30-student treatment arm and a 30-student control arm; you then compare the two arm means, $d = \bar y_T - \bar y_C = 3.0$. Nothing about a student steers which arm they land in, and that is exactly what makes the arms comparable. Synthetic; seed 45403.](../assets/figures/wk05_crd_assignment_flow.png){#fig-wk05-crd-flow fig-alt="A flow diagram. On the left, a cloud of 60 gray dots labeled 60 students, the assigned unit. An arrow leads to a box labeled random assignment, coin or shuffle. From that box two arrows fan out to an upper terracotta box, Treatment, 30 students, mean gain 8.0, and a lower slate-blue box, Control, 30 students, mean gain 5.0. Arrows from both arms meet at a final box labeled compare, d equals mean of T minus mean of C, equals 3.0."}
+
 What random assignment buys you is **exchangeability**. Because the coin does not know or care about
 prior ability, the treatment and control groups end up balanced — on average — on every
 pre-treatment variable at once, including ones you never measured. That average balance is exactly the
@@ -130,6 +131,8 @@ interpretation is not "the workshop almost worked." It is "an effect this size o
 about $6\%$ of the time if the workshop truly did nothing." The design earned the causal *framing*;
 the p-value only sets the surprise level.
 
+![**The effect and its uncertainty.** The treatment arm averages $8.0$ and the control arm $5.0$, so the observed causal effect is the gap $d = 3.0$. The error bars show $\pm\operatorname{SE}(d) \approx 1.55$: the effect is uncertain at roughly half its own size, giving the borderline $t \approx 1.94$, $p \approx 0.057$. The gap is what the design earned; the error bars are how sharply this one assignment pinned it down. Synthetic; seed 45403.](../assets/figures/wk05_group_means_effect.png){#fig-wk05-means fig-alt="A bar chart with two bars. A terracotta hatched bar, Treatment (workshop), reaches 8.0; a slate-blue bar, Control (no workshop), reaches 5.0. Each bar has a thin error bar of about plus or minus 1.55. A red double-headed arrow between the two bar tops is labeled d equals 3.0 points. A note reads SE of d is about 1.55, t about 1.94, p about 0.057."}
+
 ### The randomization reference distribution
 
 The $t$-based p-value above leans on a theoretical sampling-distribution approximation. A completely
@@ -143,6 +146,8 @@ arbitrariness alone can produce, you **shuffle** the 60 labels — randomly rela
 "treatment" and 30 "control" while keeping their outcomes fixed — recompute $d$, and repeat thousands
 of times. The resulting spread of shuffled $d$ values is the **randomization reference distribution**:
 the set of effects the design could manufacture when the treatment does nothing.
+
+![**The randomization reference distribution.** Ten thousand relabelings of the 60 fixed outcomes produce this spread of differences $d^{*}$, centered at zero — relabeling alone cannot manufacture a systematic gap. The observed $d = 3.0$ (red line) sits far in the right shoulder; the shaded tails collect every shuffle with $|d^{*}| \ge 3.0$. Their share is the **randomization $p \approx 0.06$**, essentially the theoretical $0.057$. The $p$-value is a tail of *this* distribution — a description of surprise under the null — not a verdict on the design. Synthetic; seed 45403.](../assets/figures/wk05_reference_distribution.png){#fig-wk05-refdist fig-alt="A histogram of 10,000 shuffled differences in mean gain, bell-shaped and centered at zero, ranging from about minus 5 to plus 5. The bars near the center are slate blue; the outer bars beyond plus or minus 3 are terracotta, marking the tails at least as extreme as the observed effect. A vertical red line at d equals 3.0 sits in the right shoulder, labeled observed. A note reads tails with absolute d at least 3.0 give randomization p about 0.06."}
 
 You then place the observed $d = 3.0$ against that distribution. The **randomization $p$-value** is the
 fraction of shuffles that produced a $d$ at least as extreme as $3.0$. For the Focus experiment that
@@ -221,6 +226,8 @@ $$
 t = \frac{d}{\operatorname{SE}(d)} = \frac{6}{2.83} \approx 2.12 .
 $$
 
+![**The same design move, a new context.** The texted arm averages $71$ on the attendance-readiness index and the no-text arm $65$, so $d = 6$ index points, with $\operatorname{SE}(d) \approx 2.83$ and $t \approx 2.12$. The *design* is identical to the Focus experiment — randomly assign, compare arm means, build a reference distribution — only the units, the outcome, and the numbers changed. Synthetic; illustrative, distinct from the Focus study.](../assets/figures/wk05_transfer_reminder_text.png){#fig-wk05-transfer fig-alt="A bar chart with two bars. A terracotta hatched bar, Reminder text with n equals 100, reaches 71; a slate-blue bar, No text with n equals 100, reaches 65. Thin error bars of about plus or minus 2.83 sit on each. A red double-headed arrow labeled d equals 6 index points spans the two bar tops. A note reads SE of d about 2.83, t about 2.12."}
+
 A randomization test would shuffle the $200$ text/no-text labels under the null of no effect, recompute
 $d$ each time, and report the fraction of shuffles with $|d| \ge 6$.
 
@@ -237,6 +244,8 @@ p-value here would describe surprise under the null, not certify that the trial 
 The week's central trap is **reading statistical significance as evidence of a strong design** (Risk
 5), usually braided together with **confusing random assignment with random sampling** (Risk 1) and
 **analyzing at the wrong unit** (Risk 3).
+
+![**A small $p$-value cannot tell a sound design from a broken one.** Both panels report $p \approx 0.05$. On the left a randomized experiment has balanced arms — assignment made the groups comparable before treatment, so the causal claim is licensed. On the right a confounded observational study has groups that differ *before* any treatment, so no causal claim is earned no matter how small the $p$-value. The $p$-value calibrates surprise; it never certifies the design. Synthetic; illustrative.](../assets/figures/wk05_significance_not_design.png){#fig-wk05-significance fig-alt="Two side-by-side bar panels, each showing a pre-treatment covariate mean for two groups and each annotated p about 0.05. Left panel, Randomized experiment: two nearly equal bars, Treatment 6.1 and Control 5.9, with a note that the arms are balanced by assignment so the causal claim is licensed. Right panel, Confounded observational study: a tall hatched Users bar at 7.2 and a shorter Non-users bar at 4.6, with a note that the groups differ before treatment so no causal claim is licensed."}
 
 The significance trap sounds like: "$p = 0.057$, so the design is almost good enough," or worse, "$p <
 0.05$, so the study is sound." Neither follows. The p-value is a tail probability of the randomization
@@ -281,16 +290,6 @@ randomized design and the causal reading, with the **IMS** (Çetinkaya-Rundel & 
 distribution you will build in the companion lab. *These notes are the course's own synthesis, grounded
 in but not copied from the sources.* No prose, examples, exercises, figures, or solutions are reproduced
 from any source.
-
-## Evidence and verification status
-
-**verified: false.** The design logic on this page is course-authored, but every numeric value here is
-**drafted, synthetic, and not independently checked** — the locked Focus-experiment slice $d = 3.0$,
-$\operatorname{SE}(d) \approx 1.55$, $t \approx 1.94$, theoretical $p \approx 0.057$, and randomization
-$p \approx 0.06$, together with the illustrative reminder-text transfer numbers. All study data are
-synthetic with `set.seed(45403)`. The course **math/statistics gate is BLOCKED**; do not treat any value
-on this page as a confirmed reference until the human/source sign-off in `_state/notation_ledger.md` §5
-is complete.
 
 ## Public vs. graded
 

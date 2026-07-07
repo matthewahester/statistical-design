@@ -51,7 +51,7 @@ To estimate the causal effect of $Z$ on $Y$, **block every backdoor path** by ad
 
 The course's observational study asks whether **using the tutoring center** ($Z$) improves an end-of-term
 **outcome** ($Y$). Students self-select, so prior ability is in play. The assumed diagram (described in words,
-since this draft site renders diagrams as text):
+since this diagnostic renders diagrams as text):
 
 - **PriorAbility $\to$ Use** — more-prepared students are likelier to use the center.
 - **PriorAbility $\to$ Outcome** — more-prepared students do better anyway.

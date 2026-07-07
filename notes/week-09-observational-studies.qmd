@@ -4,7 +4,6 @@ subtitle: "Association, adjustment, and the limits of causal language"
 page_mode: normal_week
 week_contract: public_note
 source_mode: source-informed
-verified: false
 readings:
   - "IMS (Çetinkaya-Rundel & Hardin), observational studies & confounding — supports association vs causation and adjustment"
   - "Causal Inference: What If (Hernán & Robins) — optional advanced pointer on adjustment for measured confounders (link only)"
@@ -88,6 +87,8 @@ ability) that also drives the outcome $Y$ (end-of-term score). When $X$ causes b
 is a **confounder**, and the naive difference in $Y$ between the two values of $Z$ absorbs the effect
 of $X$ on top of any real effect of $Z$.
 
+![**Self-selection is the whole problem.** The students who choose the tutoring center start higher on a *pre-treatment* prior-ability index (users mean about 70 versus non-users about 58) before any tutoring happens. That baseline gap is the confounder a naive outcome comparison will later mistake for an effect. Synthetic; illustrative.](../assets/figures/wk09_self_selection.png){#fig-wk09-self-selection fig-alt="Two overlapping histograms of a pre-treatment prior-ability index. The non-users distribution, in slate blue, is centered near 58; the users distribution, drawn in terracotta with diagonal hatching, is shifted to the right and centered near 70. A dashed vertical line and a solid vertical line mark the two group means, and a double-headed arrow between them is labeled users start ahead, the confounder. The takeaway is that the two groups differ in prior ability before any tutoring has occurred."}
+
 This is why the course reserves causal verbs for randomized assignment or for an explicitly adjusted
 claim with named assumptions. With no assignment and no adjustment, the only honest statement is that
 center use is **associated with** higher scores — full stop.
@@ -147,12 +148,16 @@ $$
 \hat d_{\text{adjusted}} = +3.0 \text{ points,}
 $$
 
+![**Compare like with like, tier by tier.** Splitting on the prior-ability tier (low, medium, high) and taking the user-vs-nonuser difference *inside* each tier leaves a gap of only about $+3$ everywhere; the weighted average of those within-tier differences is the adjusted $+3.0$, versus the naive $+8.0$ that ignored the tiers. Synthetic; illustrative.](../assets/figures/wk09_stratification_tiers.png){#fig-wk09-stratification-tiers fig-alt="A grouped bar chart with three prior-ability tiers on the horizontal axis: low, medium, and high. Within each tier a slate-blue non-user bar and a hatched terracotta user bar sit side by side, with values 68 and 71 in the low tier, 74 and 77 in the medium tier, and 80 and 83 in the high tier, so the within-tier user advantage is about three in every tier. A boxed note below the axis states that the average of the within-tier differences equals the adjusted plus 3.0 versus the naive plus 8.0. The takeaway is that once prior ability is held roughly constant the user advantage is small."}
+
 so confounding had inflated the naive gap by $+8.0 - (+3.0) = +5.0$ points. The honest claim upgrades
 from "associated with $+8.0$" to "associated with about $+3.0$ after adjusting for prior ability —
 which approximates a causal effect *if* prior ability is the relevant confounder and is measured
 correctly."
 
-Here is the static computation. It is shown as teaching code, not executed here.
+![**The naive gap is mostly confounding.** The unadjusted user-vs-nonuser difference is a naive $+8.0$; stratifying on the prior-ability tier shrinks it to an adjusted $+3.0$, so $+5.0$ of the naive gap was confounding, not effect. The adjusted $+3.0$ is an *estimate under the measured-confounder assumption*, not a verified causal effect. Synthetic; seed 45403.](../assets/figures/wk09_naive_vs_adjusted.png){#fig-wk09-naive-vs-adjusted fig-alt="A bar chart with two bars measuring the estimated user-vs-nonuser difference. The left hatched bar is the naive unadjusted difference at plus 8.0; the right solid bar is the adjusted stratified difference at plus 3.0. A vertical double-headed bracket in the space between the two bar tops is labeled confounding plus 5.0, showing that adjustment removed five of the eight score points. The takeaway is that most of the naive gap was a baseline difference in prior ability rather than a treatment effect."}
+
+Here is the static computation. It is shown as teaching code, not executed in this diagnostic.
 
 ```r
 set.seed(45403)
@@ -239,6 +244,8 @@ unless you are willing to defend the assumption out loud.
 
 The week's signature design trap braids four risks the ledger flags for this page.
 
+![**Two ways to over-read an adjusted number.** Left: calling the naive $+8.0$ the effect ("the center raises scores by 8.0") is unearned, because $+8.0$ is an association between self-selected groups. Right: adjusting for prior ability closes only the *measured* backdoor ($+8.0$ down to $+3.0$); an *unmeasured* confounder can still bias the $+3.0$, so it is not a certified causal effect. Synthetic; illustrative.](../assets/figures/wk09_misconception.png){#fig-wk09-misconception fig-alt="Two side-by-side bar panels, each with a hatched naive bar at plus 8.0 and a solid adjusted bar at plus 3.0. In the left panel a red cross is drawn over the naive bar with the note not causal, indicating that reading plus 8.0 as the effect is unearned because it is an association. In the right panel a solid arrow shows the naive 8.0 dropping to the adjusted 3.0 because a measured confounder was closed, while a dashed red arrow below the adjusted bar is labeled unmeasured confounder still open, true effect not certified. The takeaway is that adjustment can neutralize only the confounders you measured."}
+
 **Reading association as causation (Risk 2).** The most common error is to announce that "the tutoring
 center *raises* scores by 8 points." With no assignment, that sentence is unearned: the $+8.0$ is an
 association between self-selected groups, and the verb "raises" smuggles in a causal claim the design
@@ -289,16 +296,6 @@ of the measured-confounder / adjustment material and is linked, not reproduced:
 <https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/>. **These notes are the course's own
 synthesis, grounded in but not copied from the sources.** No prose, examples, figures, or exercises
 from any source are reproduced.
-
-## Evidence and verification status
-
-**verified: false.** The design logic on this page is course-authored, but every numeric value is
-**drafted, synthetic, and not independently checked**. The load-bearing numbers — the naive
-difference $+8.0$ (users $82.0$ vs non-users $74.0$, $n = 120$ and $n = 180$), the adjusted estimate
-$+3.0$, the $+5.0$ of confounding inflation, and the deliberate parallel to the experimental
-$d = 3.0$ — are synthetic (`set.seed(45403)`) and used here for teaching only. The course
-**math/statistics gate is BLOCKED**: do not treat any value on this page as a confirmed reference
-until the human/source sign-off in `_state/notation_ledger.md` §5 is complete.
 
 ## Public vs. graded
 

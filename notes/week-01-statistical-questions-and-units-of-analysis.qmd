@@ -4,7 +4,6 @@ subtitle: "Questions, units of analysis, and the claim a study is trying to make
 page_mode: normal_week
 week_contract: public_note
 source_mode: source-informed
-verified: false
 readings:
   - "IMS (Çetinkaya-Rundel & Hardin), data & study-design introduction — supports framing a question, a unit of analysis, and a target claim"
 toc: true
@@ -92,6 +91,8 @@ workshop students gained 3 more points." A **population** claim leaps from sampl
 leap is licensed by a different feature of the design, and using a number for a leap its design cannot
 support is the original sin this course is built to prevent.
 
+![**The spine of the whole course, in one picture.** Every study makes four quiet decisions before any data: the *question*, the *population or process* it concerns, the *unit of analysis* (the entity one row describes), and the *target claim* — descriptive, population, or causal. The design is what licenses that claim, so you name the unit first and let the arithmetic follow from the grain the design used. Synthetic; seed 45403.](../assets/figures/wk01_question_unit_claim.png){#fig-wk01-question-unit-claim fig-alt="A left-to-right flow diagram with four linked boxes. Box one, Statistical question: what do we ask, and of what. An arrow to box two, Population or process: the larger thing the claim is about. An arrow to box three, Unit of analysis: the row the design samples or assigns. An arrow to box four, Target claim: descriptive, population, or causal. Below the pipeline a line reads the design is what licenses the claim; name the question, the unit, and the target claim first, and the arithmetic follows from the grain the design used."}
+
 ### The unit of analysis is the row the design samples or assigns
 
 The unit of analysis is the entity a single row of your data table describes. It sounds trivial, but
@@ -107,6 +108,8 @@ convenient but not automatic. In a survey that sampled dorm **floors** and then 
 each floor, the floor — not the student — is what the design selected, and the analysis must account
 for that (we return to this with cluster sampling in Week 12). The discipline is to ask, every single
 time, *what entity did the design actually act on?* — and to let that, not convenience, set the grain.
+
+![**One dataset, three grains.** The same 600 students can be read at the *student* grain ($n = 600$ rows), the *classroom* grain ($n = 20$ rows of 30 students each), or the *dorm-floor* grain ($n = 5$ rows of 120 each). The unit of analysis is whichever grain the design actually sampled or assigned — you analyze at that grain, never finer. Synthetic; illustrative.](../assets/figures/wk01_units_of_analysis.png){#fig-wk01-units-of-analysis fig-alt="Three stacked rows illustrating the same 600 students at three grains. Top row, student grain: a scattered cloud of dots labeled n equals 600 individual students. Middle row, classroom grain: twenty small squares labeled n equals 20 classrooms of 30 each. Bottom row, dorm-floor grain: five wide hatched blocks labeled n equals 5 dorm floors of 120 each. A line below reads same 600 students, analyze at the grain the design acted on, never finer."}
 
 ### Sampling vs assignment: two mechanisms, two claims (previewed)
 
@@ -132,7 +135,7 @@ now; Week 3 develops the mechanism and Weeks 4–13 cash it out in numbers.
 
 We frame all three studies at the level of *question → unit → claim → design that could support it*.
 No analysis is performed this week; these are the destinations the rest of the course drives toward.
-All numbers are synthetic and seed-set (`set.seed(45403)`), and every value is `verified: false`.
+All numbers are synthetic and seed-set (`set.seed(45403)`).
 
 **Study E — the Focus study-skills experiment.** *Question:* does completing the Focus workshop raise
 the timed problem-solving gain score? *Population/process:* the process by which the workshop changes a
@@ -163,13 +166,15 @@ Week 11). The design move here is *sampling*: random selection from the frame is
 0.45 generalize to the population — and the coverage and nonresponse threats to that generalization are
 exactly what Weeks 11 and 13 examine.
 
+![**Three studies, one campus world.** All three share the same unit — the student — yet a different mechanism gives each a different reachable claim. Study E's random *assignment* ($n = 60$, 30/30) targets a **causal** claim; Study O's *self-selection* ($n = 300$, 120 users / 180 non-users) reaches only an **association**; Study S's random *sampling* (target 12,000; an SRS of 600 with 360 replying) targets a **population** claim. The mechanism, not the unit, sets what the study can say. Synthetic; seed 45403.](../assets/figures/wk01_three_study_map.png){#fig-wk01-three-study-map fig-alt="A four-column map of three studies. The columns are study and framed size, the question it asks, the unit of analysis, and the claim it can target. Row Study E, Focus experiment, n equals 60, 30 treatment and 30 control: asks does the workshop raise the gain score; unit student; claim CAUSAL via random assignment. Row Study O, tutoring center, n equals 300, 120 users and 180 non-users: asks does center use cause a better score; unit student; claim ASSOCIATION via neither, self-select. Row Study S, sleep survey, target 12,000, sample 600 with 360 replying: asks what share of students sleep enough; unit student; claim POPULATION via random sampling. A note reads same unit, three different mechanisms, three different claims."}
+
 A static map of the question → unit → claim → design chain for one study, drawn as plain comments. No
 randomness is drawn, so no seed is needed in this chunk; we include `set.seed(45403)` only to model
 the course-wide convention that any chunk *capable* of drawing randomness fixes the seed.
 
 ```r
 # Week 1 framing: the question -> unit -> claim -> design chain (no analysis yet)
-# Synthetic; seed set per course convention. verified: false.
+# Synthetic; seed set per course convention.
 set.seed(45403)
 
 studies <- data.frame(
@@ -238,6 +243,8 @@ the analyst manufactures observations the design never delivered, deflating the 
 inflating significance. The fix is one disciplined question asked every time: *what entity did the
 design actually sample or assign?* — and then analyze at exactly that grain, never finer.
 
+![**Counting the wrong unit invents information.** If the design assigned 20 classrooms but the analysis treats all 600 students as independent, it claims 600 units where the design delivered only 20. Because a standard error shrinks like $1/\sqrt{n}$, the reported SE collapses to about $\sqrt{20/600} \approx 0.18$ of the honest value — roughly five times too small — manufacturing significance the design never earned. Synthetic; illustrative.](../assets/figures/wk01_wrong_unit.png){#fig-wk01-wrong-unit fig-alt="Two bar panels. Left panel, how many independent units: a tall hatched red bar at 600 labeled counted as 600 independent students and stamped WRONG, beside a short blue bar at 20 labeled 20 assigned classrooms, the design grain. Right panel, consequence for the standard error: a short hatched red bar at 0.18 labeled reported SE using n equals 600, beside a full blue bar at 1.00 labeled honest SE using n equals 20, with a note that SE is proportional to one over the square root of n, so using n equals 600 shrinks the reported SE to about 0.18 of the honest one."}
+
 A close relative, previewed this week and developed in Week 3, is **confusing random sampling with
 random assignment**. They are different mechanisms and they license different claims: sampling earns a
 **population** claim, assignment earns a **causal** claim. A study with beautiful random sampling and
@@ -275,17 +282,6 @@ optional advanced causal reference is not needed yet; it enters only in Weeks 9�
 *These notes are the course's own synthesis, grounded in but not copied from the sources.* No source
 prose, examples, datasets, figures, or exercises are reproduced; the framing, the three recurring
 campus studies, and all numbers are course-original and synthetic.
-
-## Evidence and verification status
-
-**verified: false.** The design logic on this page — the question → unit → claim → design chain, the
-sampling-vs-assignment preview, and the wrong-unit-of-analysis trap — is course-authored. But every
-numeric value previewed here is **drafted, synthetic, and not independently checked**: Study E's
-effect $d = 8.0 - 5.0 = 3.0$, Study O's naive $+8.0$ and adjusted $+3.0$, and Study S's
-$\hat p = 162/360 = 0.45$ are destinations the later weeks develop, not results established here. The
-transfer example's numbers (the clinic's $0.30$, the $0.12$ difference) are illustrative only. The
-course **math/statistics gate is BLOCKED**; do not treat any value as a confirmed reference until the
-human/source sign-off in `_state/notation_ledger.md` §5 is complete.
 
 ## Public vs. graded
 

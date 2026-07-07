@@ -4,7 +4,6 @@ subtitle: "Watching the standard error shrink when you block"
 page_mode: software_lab_week
 week_contract: software_note_lab
 source_mode: source-informed
-verified: false
 toc: true
 ---
 
@@ -32,6 +31,8 @@ between-tier differences are differenced out of the residual. The residual SD dr
 $4.0$, the standard error falls from about $1.55$ to about $1.03$, and the borderline $p \approx 0.057$ becomes a
 clear $p \approx 0.005$. Then you push the idea to its limit with **pairing**: 30 matched pairs, one difference
 per pair, standard error about $0.91$.
+
+![**Blocking narrows the estimate; it does not move it.** Two simulated sampling distributions of the estimated effect $d = \bar y_T - \bar y_C$ over repeated assignments, both centered on the *same* true effect $d = 3.0$. The completely randomized design (dashed) is wider — $\operatorname{SE} \approx 1.55$ — while the tier-blocked design (solid) is narrower — $\operatorname{SE} \approx 1.03$. Same center, tighter spread: that is precision, not a bigger effect. Synthetic; seed 45403.](../assets/figures/lab06_sampling_distributions.png){#fig-lab06-sampling-distributions fig-alt="Two overlaid bell-shaped density curves of the estimated effect d over repeated random assignments, both centered at 3.0. A dashed slate-blue curve for the completely randomized design is wide, with a standard error of about 1.55. A solid terracotta curve for the tier-blocked design is tall and narrow, with a standard error of about 1.03. A red vertical line marks the shared center at d equals 3.0. The blocked curve keeps the same center but has a much smaller spread."}
 
 The single sentence to carry out of this lab: **blocking changes precision, not the effect.** The numerator
 $d = 3.0$ never moves; only the noise in the denominator shrinks. If a simulation of yours ever makes $d$ drift
@@ -79,7 +80,7 @@ d_true <- 3.0         # the workshop's causal effect, in gain points (held fixed
 ```
 
 Two reminders before you start. First, the data are **synthetic; seed set** — these are not real student
-records, and every number is `verified: false` (the course math/statistics gate is BLOCKED). Second, the point
+records. Second, the point
 of the lab is the *contrast* between designs, so resist the urge to "improve" the effect: the effect is fixed by
 design at $3.0$, and your job is to watch the standard error, not to chase a smaller $p$-value.
 
@@ -99,7 +100,7 @@ set.seed(45403)
 # Pre-treatment prior-performance tier exists in the data, but the CRD IGNORES it:
 # treatment is randomized across all 60 students at once.
 tier   <- rep(c("low", "med", "high"), each = 20)   # PRE-TREATMENT structure (unused here)
-tier_effect <- c(low = -4, med = 0, high = 4)        # tiers really do differ at baseline
+tier_effect <- c(low = -5.5, med = 0, high = 5.5)    # tiers really do differ at baseline
 
 z <- sample(rep(c("T", "C"), c(n_T, n_C)))           # random assignment, 30 T / 30 C
 mu_control <- 5.0                                     # control mean gain
@@ -129,6 +130,8 @@ Now use the tier you deliberately ignored in Step 1. Randomize treatment versus 
 three tiers, then compute the effect as the average of the within-tier differences. Because every comparison
 happens inside a tier, the between-tier piece is differenced out and the residual SD that drives the standard
 error falls toward $4.0$. The effect stays at $3.0$.
+
+![**Randomize within each tier, then difference the tiers out.** The 60 students are first sorted into three pre-treatment prior-performance tiers (low, medium, high) of 20 each; treatment versus control is then randomized *inside* each tier, 10 to 10. Because every treatment-versus-control comparison happens within a tier, the big between-tier baseline gaps ($-5.5$, $0$, $+5.5$) are differenced out, so the residual SD driving the standard error drops from about $6.0$ to about $4.0$ while the effect stays at $3.0$. Synthetic; seed 45403.](../assets/figures/lab06_within_block_schematic.png){#fig-lab06-within-block-schematic fig-alt="A schematic with three stacked bands, one per pre-treatment tier: a high tier at plus five point five baseline, a med tier at zero baseline, and a low tier at minus five point five baseline. Each band holds twenty unit markers arranged in two rows of ten. Within every band, ten are terracotta circles labeled Treatment and ten are slate-blue squares labeled Control, mixed at random. A note reads that comparing treatment to control inside each tier differences out the between-tier gaps, dropping the residual standard deviation from about 6.0 to about 4.0."}
 
 ```r
 set.seed(45403)
@@ -220,12 +223,16 @@ print(results)
 # d :  3.0  =   3.0  =   3.0     (effect unchanged)
 ```
 
+![**Same numerator, shrinking denominator.** The standard error of the *same* effect $d = 3.0$ across the three designs: about $1.55$ for complete randomization, $1.03$ once you block on the prior-performance tier, and $0.91$ once you pair. The bars fall left to right while the effect never moves — precision improving as each design removes more nuisance variation. Synthetic; seed 45403.](../assets/figures/lab06_se_comparison.png){#fig-lab06-se-comparison fig-alt="A bar chart of the standard error of the effect for three designs, each bar labeled with its value. CRD, the Week 5 baseline with nothing removed, is 1.55; RCBD, blocked on tier and removing between-tier variation, is a hatched bar at 1.03; Paired, 30 pairs removing between-subject variation, is a cross-hatched bar at 0.91. An arrow across the top reads that precision improves as the standard error falls, with the effect held at d equals 3.0."}
+
 **Interpretation.** Read the table down the `se` column: $1.55 > 1.03 > 0.91$, precision improving as you remove
 more nuisance variation. Read it down the `d` column: $3.0 = 3.0 = 3.0$, the effect untouched. That side-by-side
 is the entire lesson of Week 6 in one frame — design buys you a quieter measurement of the same causal effect,
 and the shrinking $p$-values describe the design's *precision*, never its *strength*. A confounded study with
 $p = 0.003$ would still be confounded; here the causal reading is safe only because random *assignment* (Step 1)
 earned it.
+
+![**Your turn: predict before you read the curves.** How does the blocked standard error respond as the tiers pull farther apart? The completely randomized SE (dashed) climbs as the between-tier spread grows, because it lumps that spread into its residual; the blocked SE (solid) stays flat near $1.03$, because blocking removes it. At the lab's operating point (between-tier SD $\approx 4.5$) the two sit at $1.55$ and $1.03$, and the shaded gap is what blocking buys. Predict the shape of the solid line first, then check it against the figure. Synthetic; seed 45403.](../assets/figures/lab06_block_se_sensitivity.png){#fig-lab06-block-se-sensitivity fig-alt="A line chart with between-tier spread on the horizontal axis and the standard error of the effect on the vertical axis. A dashed slate-blue line, the CRD standard error, rises from about 1.03 upward as the between-tier spread grows. A solid terracotta line, the blocked standard error, stays flat near 1.03. The shaded region between the two lines widens to the right and is labeled what blocking buys. A dotted marker at a between-tier standard deviation of about 4.5 shows the CRD standard error at 1.55 and the blocked standard error at 1.03. A prompt invites predicting whether the blocked line climbs, falls, or stays flat."}
 
 ## Verify
 

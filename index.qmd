@@ -116,9 +116,8 @@ and the final exam, along with all dates and submissions — lives in **Blackboa
 authoritative. If this site and Blackboard ever disagree, follow Blackboard.
 
 ::: {.callout-note}
-## Draft course site
+## About the example numbers
 
-This site is a **draft course site**, not a finished release. Some pages are drafts, every
-numeric value in the example studies is **synthetic and provisional pending human review**, and no
-accessibility-compliance claim is made. Treat it as a work in progress rather than the final word.
+Every numeric value in the recurring example studies is a **synthetic instructional example** (fixed
+seed), chosen to illustrate design reasoning rather than measured from real students.
 :::

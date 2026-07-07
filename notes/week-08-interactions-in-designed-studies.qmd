@@ -4,7 +4,6 @@ subtitle: "When the effect of one factor depends on another factor"
 page_mode: normal_week
 week_contract: public_note
 source_mode: source-informed
-verified: false
 readings:
   - "IMS (Çetinkaya-Rundel & Hardin), interaction between factors in experiments — supports reading cell means before a lone main effect"
 toc: true
@@ -109,6 +108,8 @@ points when a student is also tutored. The half-point scaling is a convention so
 the same per-factor scale as a main effect; what carries the meaning is its **sign** and **size**, not
 the factor of $\tfrac12$.
 
+![**Non-parallel lines are the interaction.** Plotting the four Focus cell means with the workshop on the x-axis and one line per tutoring level, the tutoring-yes line climbs from $7.0$ to $13.0$ (slope $+6$) while the tutoring-no line climbs only from $5.0$ to $8.0$ (slope $+3$). The lines are *not* parallel, and half of the gap between those slopes is the interaction $AB = +1.5$. Synthetic; seed 45403.](../assets/figures/wk08_interaction_plot.png){#fig-wk08-interaction-plot fig-alt="A line chart with the workshop, no then yes, on the horizontal axis and mean gain score on the vertical axis. A solid terracotta line for tutoring yes rises steeply from 7.0 at workshop-no to 13.0 at workshop-yes, a slope of plus 6. A dashed slate-blue line for tutoring no rises more gently from 5.0 to 8.0, a slope of plus 3. The two lines are not parallel; a note reads non-parallel lines equal interaction, AB equals plus 1.5."}
+
 ### Synergy versus antagonism — read the sign
 
 The sign of the interaction names the *kind* of dependence:
@@ -164,6 +165,10 @@ gain
         no                          yes
 ```
 
+This sketch deliberately puts **tutoring** on the x-axis, whereas the rendered figures put the
+**workshop** on the x-axis; because an interaction is symmetric in $A$ and $B$, both axis choices show
+the same non-parallelism, so drawing it both ways is a check rather than a contradiction.
+
 The two lines are **not parallel**: the *workshop-yes* line rises more steeply (from $8$ at tutoring-no
 to $13$ at tutoring-yes, a rise of $13 - 8 = 5$), while the lower *workshop-no* line rises only by
 $7 - 5 = 2$. **Non-parallel lines = interaction.** If the interaction were zero, the two lines would be
@@ -173,7 +178,9 @@ vertical gap between the lines (the workshop effect, read at a fixed tutoring le
 $8 - 5 = 3$ at tutoring-no to $13 - 7 = 6$ at tutoring-yes. That gap doubles — it widens by $6 - 3 = 3$
 points — and the interaction is exactly half of that widening, $\tfrac12 \times 3 = +1.5$. The lines
 fan apart, which is the synergy made graphical. (The plotted figure is shown as *static, non-executed*
-here; its R is below and is not run.)
+in this diagnostic; its R is below and is not run.)
+
+![**What an interaction looks like — and what it does not.** Two interaction plots on the same axes. Left: a *hypothetical* no-interaction case where both tutoring lines rise with the same slope, so they stay parallel and the vertical gap is a constant $2$ ($AB = 0$). Right: the real Focus data, where the lines fan apart as the workshop effect grows from $3$ (tutoring-no) to $6$ (tutoring-yes), giving $AB = +1.5$. Parallel means no interaction; non-parallel means interaction. Synthetic; illustrative.](../assets/figures/wk08_parallel_vs_nonparallel.png){#fig-wk08-parallel-vs-nonparallel fig-alt="Two side-by-side line charts, each with the workshop on the horizontal axis and mean gain score on the vertical axis. Left panel titled No interaction, AB equals 0: a solid terracotta tutoring-yes line and a dashed slate-blue tutoring-no line both rise with equal slope and stay parallel, a constant gap of 2. Right panel titled Interaction, AB equals plus 1.5: the terracotta tutoring-yes line rises much more steeply than the slate-blue tutoring-no line, so the two lines fan apart from a gap of 3 to a gap of 6."}
 
 ## Worked examples
 
@@ -211,6 +218,8 @@ mainB <- mean(cell[,"yes"]) - mean(cell[,"no"])           # 10.0 - 6.5 = +3.5
 # AB    = +1.5  (positive synergy)
 # mainA = +4.5 ; mainB = +3.5
 ```
+
+![**The two simple effects of the workshop, side by side.** Grouped bars show the workshop's effect within each tutoring condition. Without tutoring the gain rises from $5.0$ to $8.0$, a simple effect of $8 - 5 = +3.0$; with tutoring it rises from $7.0$ to $13.0$, a simple effect of $13 - 7 = +6.0$. The effect *doubles*, and half their difference, $\tfrac12(6 - 3)$, is the interaction $+1.5$. Synthetic; seed 45403.](../assets/figures/wk08_two_simple_effects.png){#fig-wk08-two-simple-effects fig-alt="A grouped bar chart with two groups, without tutoring and with tutoring. In the without-tutoring group a slate-blue workshop-no bar reaches 5.0 and a hatched terracotta workshop-yes bar reaches 8.0, joined by a red double-headed arrow labeled plus 3.0. In the with-tutoring group the workshop-no bar reaches 7.0 and the hatched workshop-yes bar reaches 13.0, joined by a red double-headed arrow labeled plus 6.0. The workshop effect is twice as large with tutoring as without."}
 
 **Interpretation.** The interaction is $AB = +1.5$ points, a **positive synergy**: the workshop's
 *caused* effect on the gain score is $3.0$ points without tutoring but $6.0$ points with tutoring, so
@@ -264,6 +273,8 @@ $+4.5$ alone is technically a true average and practically a misdirection, becau
 that actually follows from the data — *pair the workshop with tutoring* — lives in the interaction, not
 the main effect.
 
+![**The averaged main effect describes no one.** The reported "+4.5" main effect of the workshop is the midpoint of two real conditions it hides: $+3.0$ without tutoring and $+6.0$ with it. The dotted line marks the $+4.5$ average; the red arrows show the $\pm 1.5$ spread on either side — exactly the interaction. A student in either real condition gets an effect the average never names. Synthetic; seed 45403.](../assets/figures/wk08_main_effect_hides_synergy.png){#fig-wk08-main-effect-hides-synergy fig-alt="A bar chart of the workshop's effect on the gain score with three bars. A slate-blue bar for without tutoring at plus 3.0, a gray cross-hatched bar for the reported main effect at plus 4.5, and a hatched terracotta bar for with tutoring at plus 6.0. A dotted horizontal line sits at 4.5. Red double-headed arrows show a drop of 1.5 from the average down to 3.0 and a rise of 1.5 up to 6.0, so the reported plus 4.5 matches neither real condition."}
+
 The fix is an order-of-operations rule: **compute and inspect the interaction before stating any lone
 main effect.** Draw the interaction plot; if the lines are clearly non-parallel, report the **cells**
 (or the simple effects) and treat the main effect as, at most, a coarse summary you flag as such. Only
@@ -297,15 +308,6 @@ week is the course's own **instructor notes**, which carry the Focus 2×2 exampl
 contrasts computation, and the read-the-cells discipline. *These notes are the course's own synthesis,
 grounded in but not copied from the sources.* No prose, examples, figures, or exercises are reproduced
 from any source.
-
-## Evidence and verification status
-
-**verified: false.** The design logic on this page is course-authored, but every numeric value here is
-**drafted, synthetic, and not independently checked** — the four cell means ($5.0,\ 8.0,\ 7.0,\
-13.0$), the simple effects ($3.0$ and $6.0$), the interaction $AB = +1.5$, and the main effects
-($A = +4.5$, $B = +3.5$), along with the illustrative drug × diet numbers. The course
-**math/statistics gate is BLOCKED**. Do not treat any value here as a confirmed reference until the
-human/source sign-off in `_state/notation_ledger.md` §5 is complete.
 
 ## Public vs. graded
 

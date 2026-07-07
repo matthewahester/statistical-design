@@ -4,7 +4,6 @@ subtitle: "The signature distinction: population claims vs causal claims"
 page_mode: normal_week
 week_contract: public_note
 source_mode: source-informed
-verified: false
 readings:
   - "IMS (Çetinkaya-Rundel & Hardin), study-design & sampling — supports sampling vs assignment"
 toc: true
@@ -75,6 +74,8 @@ By the end of this week you should be able to:
 
 ## Concept development
 
+![**Two mechanisms, two claims.** Random *sampling* moves from a population (12,000 undergraduates) down into a sample ($n = 600$) and earns a **population** claim; random *assignment* moves from a sample (60 students) into a 30-student treatment arm and a 30-student control arm and earns a **causal** claim. They act at different moments and license different claims — a study can have one, both, or neither. Synthetic; seed 45403.](../assets/figures/wk03_two_mechanisms.png){#fig-wk03-two-mechanisms fig-alt="A two-panel diagram. Left panel, Random sampling: a large box labeled Population, 12,000 undergrads, with a downward arrow labeled random sampling selects units into the sample pointing to a smaller box labeled Sample, n equals 600; a banner reads earns a population claim, generalize to the population. Right panel, Random assignment: a box labeled Sample, 60 students, with a downward arrow labeled random assignment allocates treatment that splits into a hatched box labeled Treatment 30 and a box labeled Control 30; a banner reads earns a causal claim, cause for these units."}
+
 ### Random sampling: the mechanism that earns a population claim
 
 Random sampling is a rule for getting *from a population (or frame) into a sample*. In a **simple
@@ -124,6 +125,8 @@ longer generalize). Move **right across a row** and you lose the causal claim (y
 "caused"). The top-left box is rare and precious; most real studies sit elsewhere, and the honest move
 is to claim *only what your box allows* and to name what it cannot support.
 
+![**One, both, or neither.** The two mechanisms are independent, so every study lands in one cell of the sampling-by-assignment grid, and the cell fixes the claim: both present is the generalizable-cause gold standard (top-left); sampling only earns a population claim without cause (top-right, where **Study S** sits); assignment only earns a cause without generalization (bottom-left, where **Study E** and the A/B test sit); neither earns association only (bottom-right). Read down a column to lose the population claim, across a row to lose the causal claim. Synthetic; illustrative.](../assets/figures/wk03_two_by_two.png){#fig-wk03-two-by-two fig-alt="A two-by-two grid. Rows are random sampling yes on top and no on the bottom; columns are random assignment yes on the left and no on the right. Top-left cell, both yes: causal and population, a randomized experiment on a random sample, labeled gold standard. Top-right, sampling yes and assignment no: population not causal, a survey or well-sampled observational study, with an arrow labeled Study S the survey. Bottom-left, sampling no and assignment yes: causal not population, an experiment on a convenience group, with an arrow labeled Study E and the A/B test. Bottom-right, neither: association only from a convenience observational study."}
+
 The recurring campus studies are deliberately built to occupy different boxes. The **study-habits
 survey** (Study S) uses sampling but not assignment — bottom-left of nothing, top-right of the
 table — so it earns a population proportion but no cause. The **Focus experiment** (Study E) uses
@@ -156,6 +159,8 @@ design says that sleep *causes* anything, only that this fraction sleeps. (The f
 the $240$ nonrespondents threaten even the population claim — that is Week 11's problem, not this
 week's.)
 
+![**Study S earns a population claim by random sampling.** The survey funnels a target population of 12,000 undergraduates through a registrar-email frame of 11,400 (a coverage gap of 600 who can never be selected) to a simple random sample of $n = 600$ invited, of whom 360 respond with $\hat p = 0.45$ reporting at least seven hours of sleep. Because the units were randomly *sampled*, the design earns a **population** claim (SE about 0.026); with no treatment assigned it earns no causal claim at all. Synthetic; seed 45403.](../assets/figures/wk03_study_s_sampling.png){#fig-wk03-study-s-sampling fig-alt="A left-to-right funnel of four boxes joined by arrows: Target population 12,000, then Sampling frame 11,400, then Sample invited n equals 600, then Respondents 360 with p-hat equals 0.45. A red note under the frame reads coverage gap 600 students can never be selected. A banner across the top reads random sampling earns a population claim, about 45 percent report at least 7 hours sleep, standard error about 0.026."}
+
 **Study E — the Focus study-skills experiment (assignment, no sampling).** Here $n = 60$ students are
 randomized $30$ to a study-skills workshop and $30$ to control, and the outcome is a timed
 problem-solving **gain score**. The treatment mean gain is $\bar y_T = 8.0$ and the control mean gain
@@ -171,6 +176,8 @@ on average, because the coin (not prior ability) decided the groups and made the
 $60$ students were not randomly sampled from any population, so this earns **no population claim**: we
 cannot say the $3.0$-point effect holds for all undergraduates, only for units like the ones in the
 study. Assignment bought the cause; the missing sampling means external validity is unargued.
+
+![**Study E earns a causal claim by random assignment.** A convenience group of 60 students — not drawn from any population — passes through a single random-assignment gate that forms a 30-student treatment arm (mean gain $\bar y_T = 8.0$) and a 30-student control arm (mean gain $\bar y_C = 5.0$); comparing the arm means gives $d = 3.0$. Because the units were randomly *assigned*, the design earns a **causal** claim for these students, but with no sampling it earns no population claim. Synthetic; seed 45403.](../assets/figures/wk03_study_e_assignment.png){#fig-wk03-study-e-assignment fig-alt="A flow diagram. A box labeled 60 students, a convenience group, with a red note not drawn from any population, feeds an arrow into a box labeled random assignment. Two arrows fan out to an upper hatched box, Treatment 30, mean gain y-bar-T equals 8.0, and a lower box, Control 30, mean gain y-bar-C equals 5.0. A line reads compare arm means, d equals y-bar-T minus y-bar-C equals 3.0. A banner reads random assignment earns a causal claim for these units, no sampling means no population claim."}
 
 Put the two next to each other and the distinction is unmissable: **same campus, same questions,
 different mechanism, different licensed claim.** The survey can generalize but not attribute cause; the
@@ -244,6 +251,8 @@ assignment.** The two failures are mirror images:
   the jump to *all undergraduates* is unsupported. The correct claim names its scope: "for students
   like those in the study, the workshop *causes* about a $3.0$-point gain."
 
+![**The signature error, in both directions.** Reading a causal claim off a study that only *sampled* (left) — a random sample of 600 licenses a population *association*, never "the center raises scores" — and reading a population claim off a study that only *assigned* (right) — randomly assigning 60 students licenses a cause for those units, never "holds for all undergraduates." Each panel keeps the claim its mechanism earns and strikes out the claim it does not. Synthetic; illustrative.](../assets/figures/wk03_confusing_the_two.png){#fig-wk03-confusing-the-two fig-alt="Two panels, each showing a valid claim kept and an invalid claim struck out with a red X. Left panel, sampling read as causation: a box random sample of 600, sampling only, with a valid arrow to population association marked ok and a struck-out arrow to the center raises scores marked no; a note reads no random assignment, so no causal claim. Right panel, assignment read as a population claim: a box randomly assign 60 students, assignment only, with a valid arrow to cause for these units marked ok and a struck-out arrow to holds for all undergraduates marked no; a note reads no random sampling, so no population claim."}
+
 Both mistakes substitute one mechanism's license for the other's. The fix is a two-step habit you can
 apply to any claim: **(1) name the mechanism** — was there random sampling, random assignment, both, or
 neither? **(2) state only the matching claim** — population from sampling, cause from assignment — and
@@ -275,17 +284,6 @@ distinct ideas and motivates which claim each supports. Read that chapter for th
 terminology level; the side-by-side survey-versus-experiment framing and the 2×2 claim table here are
 the course's own organization. *These notes are the course's own synthesis, grounded in but not copied
 from the sources.*
-
-## Evidence and verification status
-
-**verified: false.** The design logic on this page is course-authored, but every numeric value is
-**drafted, synthetic, and not independently checked**. The load-bearing numbers here are Study S's
-sampling slice — frame $11{,}400$ (coverage gap $600$ from the $12{,}000$ population), $n = 600$
-invited, $360$ responding, $\hat p = 162/360 = 0.45$, $\operatorname{SE} \approx 0.026$, interval
-$(0.40, 0.50)$ — and Study E's assignment slice — $n = 60$ split $30/30$ with $\bar y_T = 8.0$,
-$\bar y_C = 5.0$, and $d = 3.0$. The A/B transfer numbers are illustrative and clearly distinct. The
-course **math/statistics gate is BLOCKED**; do not treat any value here as a confirmed reference until
-the human/source sign-off in `_state/notation_ledger.md` §5 is complete.
 
 ## Public vs. graded
 

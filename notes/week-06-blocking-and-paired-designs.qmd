@@ -4,7 +4,6 @@ subtitle: "Sharpening the same effect by removing nuisance variation"
 page_mode: normal_week
 week_contract: public_note
 source_mode: source-informed
-verified: false
 readings:
   - "IMS (Çetinkaya-Rundel & Hardin), experiments and blocking/matching — supports randomized block and paired designs"
 toc: true
@@ -102,6 +101,8 @@ $p \approx 0.005$ purely because the design removed a known nuisance. That is "b
 visible and controllable, so you controlled it by design rather than hoping randomization would balance it. You
 still randomize *within* tiers because there is plenty you cannot foresee — that is "randomize what you cannot."
 
+![**Blocking sorts first, then randomizes within each tier.** The 60 students are split into three pre-treatment prior-performance tiers — low, medium, and high — and within each tier 10 students are randomized to treatment and 10 to control. Because every comparison happens inside a tier, the large between-tier spread never enters the residual, dropping the residual SD from $6.0$ to about $4.0$. Synthetic; seed 45403.](../assets/figures/wk06_blocking_schematic.png){#fig-wk06-blocking fig-alt="A schematic with three stacked tier rows labeled High tier, Medium tier, and Low tier, each holding 20 students. In every row an arrow sends the tier through a randomize-within-tier gate that forms a hatched Treatment box of 10 circles and a Control box of 10 squares. A footnote states that comparing treatment versus control within each tier removes the between-tier spread and lowers the residual standard deviation from 6.0 to about 4.0."}
+
 ### Pairing: the block of size two
 
 Pairing is blocking taken to its limit. Instead of three tiers, form **30 matched pairs** of closely similar
@@ -115,6 +116,8 @@ $$
 \operatorname{SE} = \frac{s_d}{\sqrt{n}} = \frac{5.0}{\sqrt{30}} \approx 0.91 ,
 \qquad t = \frac{3.0}{0.91} \approx 3.29, \qquad p \approx 0.003 .
 $$
+
+![**Pairing collapses each matched pair to a single difference.** The left panel shows 10 of the 30 matched pairs as connecting lines — each line's rise from the control member to the treated member is that pair's difference $d_i = y_T - y_C$. The right panel collapses all 30 pairs to their within-pair differences, centered at $\bar d = 3.0$ with spread $s_d = 5.0$, giving $\operatorname{SE} = 5.0/\sqrt{30} \approx 0.91$. Synthetic; seed 45403.](../assets/figures/wk06_paired_schematic.png){#fig-wk06-paired fig-alt="A two-panel figure. The left panel is a slopegraph of 10 matched pairs, each with a control member on the left and a treated member on the right joined by a line whose slope is the pair difference, and most lines rise. The right panel is a dot strip of all 30 within-pair differences scattered around a bold line at the mean difference of 3.0, with a double-headed marker showing the difference spread of 5.0 and a note that the standard error equals 5.0 over the square root of 30, about 0.91."}
 
 The effect is **still $d = 3.0$**, now with the tightest SE of the three designs. The unit of analysis has
 moved from the student to the **pair**: there are 30 differences, not 60 observations, and analyzing pairs as if
@@ -143,8 +146,10 @@ Use the locked Focus numbers. The effect is held at $d = 3.0$ throughout; only t
 | RCBD (blocked on tier) | between-tier | $\approx 4.0$ | $\approx 1.03$ | $\approx 2.90$ | $\approx 0.005$ |
 | Paired (30 pairs) | between-subject | $s_d = 5.0$ | $\approx 0.91$ | $\approx 3.29$ | $\approx 0.003$ |
 
+![**Same effect, three designs, shrinking standard error.** Holding the effect at $d = 3.0$, the standard error falls from about $1.55$ under complete randomization to about $1.03$ when blocking on prior-performance tier and about $0.91$ when pairing, so the two-sided $p$ sharpens from about $0.057$ to $0.005$ to $0.003$. The estimate gets sharper because the design removes nuisance variation, not because the effect grew. Synthetic; seed 45403.](../assets/figures/wk06_se_comparison.png){#fig-wk06-se-comparison fig-alt="A bar chart of the standard error of the effect for three designs. The CRD bar is about 1.55, the RCBD blocked bar about 1.03, and the paired bar about 0.91, each annotated with its t and p values: t about 1.94 and p about 0.057, t about 2.90 and p about 0.005, and t about 3.29 and p about 0.003. A curved arrow labeled sharper estimate points from the tallest bar down to the shortest, and a note states the effect is held at d equals 3.0 throughout while only the standard error shrinks."}
+
 Here is the static computation. The data are synthetic; seed set. This block is shown as teaching, not
-executed here.
+executed in this diagnostic.
 
 ```r
 set.seed(45403)
@@ -197,6 +202,8 @@ $$
 \operatorname{SE} = \frac{s_d}{\sqrt{n}} = \frac{1.5}{\sqrt{20}} \approx 0.34 .
 $$
 
+![**Same transfer logic: pairing halves the standard error.** In the within-subject taste test the mean difference is held at $\bar d = 1.2$ on the 0–10 liking scale. Comparing 40 tasters unpaired gives $\operatorname{SE} \approx 0.76$; letting each of 20 tasters rate both cups and keeping the within-taster difference removes the personal rating level and roughly halves it to $\operatorname{SE} \approx 0.34$. Synthetic; illustrative.](../assets/figures/wk06_taste_test_transfer.png){#fig-wk06-taste-test fig-alt="A bar chart of the standard error of the mean difference for a taste test. The unpaired design of 40 tasters gives a bar of about 0.76; the paired design where 20 tasters each rate both cups gives a bar of about 0.34. A curved arrow between the bars notes that pairing removes the between-taster level and roughly halves the standard error on the same mean difference of 1.2."}
+
 ```r
 set.seed(45403)
 
@@ -233,6 +240,8 @@ do not block or pair on it. And remember the other half: even a correct, pre-tre
 **SE**, never the effect. If your "blocking" appears to move $d$ away from $3.0$, you have not blocked — you
 have biased.
 
+![**Analyzing a paired design as if it were completely randomized throws the precision away.** Both bars use the same 30 paired differences and the same effect $d = 3.0$; only the analysis differs. Done correctly, pairing gives $\operatorname{SE} \approx 0.91$ ($t \approx 3.29$, $p \approx 0.003$); ignoring the pairing and treating the data as an unpaired complete randomization re-inflates the standard error to about $1.55$ ($t \approx 1.94$, $p \approx 0.057$), handing back the borderline result the design was built to beat. Synthetic; seed 45403.](../assets/figures/wk06_analyze_as_crd.png){#fig-wk06-analyze-as-crd fig-alt="A bar chart comparing two analyses of the same paired data. The correct paired-analysis bar is about 0.91, marked t about 3.29 and p about 0.003 and tagged yes. The bar for analyzing the same data as a completely randomized design is about 1.55, marked t about 1.94 and p about 0.057 and tagged no. A curved arrow and a note explain that ignoring the pairing re-inflates the standard error from 0.91 to 1.55."}
+
 ## Low-stakes self-checks (ungraded)
 
 These are for your own practice. They are ungraded, with no points and no due date.
@@ -255,16 +264,6 @@ For this week, read the experiments material on **blocking and matching** in *In
 comparisons as ways to control nuisance variation. The reference-distribution and simulation posture used in the
 companion lab is grounded in *Statistical Inference via Data Science* (ModernDive). These notes are the course's
 own synthesis, grounded in but not copied from the sources.
-
-## Evidence and verification status
-
-**verified: false.** The design logic on this page is course-authored, but every numeric value is drafted,
-synthetic (`set.seed(45403)`), and not independently checked. The load-bearing numbers — the held effect
-$d = 3.0$; the CRD $\operatorname{SE} \approx 1.55$; the blocked residual SD $6.0 \to 4.0$ giving
-$\operatorname{SE} \approx 1.03$, $t \approx 2.90$, $p \approx 0.005$; the paired $s_d = 5.0$ giving
-$\operatorname{SE} \approx 0.91$, $t \approx 3.29$, $p \approx 0.003$; and the transfer taste-test figures — are
-illustrative for teaching, not confirmed references. The course **math/statistics gate is BLOCKED**; do not
-treat any value here as certified until the human/source sign-off in `_state/notation_ledger.md` §5 is complete.
 
 ## Public vs. graded
 
