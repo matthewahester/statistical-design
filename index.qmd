@@ -3,7 +3,7 @@ pagetitle: "Design, Experiments & Causal Evidence"
 toc: false
 ---
 
-![](assets/hero-web-800.webp){srcset="assets/hero-web-800.webp 800w, assets/hero-web.webp 1400w" sizes="(min-width: 992px) 760px, 92vw" .course-hero-img fig-alt="Course identity hero for Design, Experiments and Causal Evidence — a tan desert-rose crystal cluster surrounded by study-design graphics including a design-to-evidence workflow, a causal diagram with a confounder and a backdoor path, and a blocking-improves-precision illustration, with the course title."}
+![](assets/hero-web-800.webp){srcset="assets/hero-web-800.webp 800w, assets/hero-web.webp 1400w" sizes="(min-width: 1200px) 1100px, 92vw" .course-hero-img .column-page fig-alt="Course identity hero for Design, Experiments and Causal Evidence — a tan desert-rose crystal cluster surrounded by study-design graphics including a design-to-evidence workflow, a causal diagram with a confounder and a backdoor path, and a blocking-improves-precision illustration, with the course title."}
 
 # Design, Experiments & Causal Evidence {.course-landing-title}
 
