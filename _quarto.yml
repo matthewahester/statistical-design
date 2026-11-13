@@ -38,6 +38,10 @@ website:
     an assembled course site (notes, labs, and resources) on study design and
     causal reasoning, curated by Matt Hester.
   open-graph: true
+  # The browser-tab icon: the same 128 px course mark the navbar shows.
+  # Until 2026-11-13 the site had no favicon.
+  favicon: assets/icon-128.png
+
   navbar:
     pinned: true
     background: dark            # black top bar — the family signature
